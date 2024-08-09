@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech news live ticker (Lumicoo.net)</title>
+<meta name="title" content="Tech news live ticker (Lumicoo.net)" />
+<meta name="description" content="Live feed of all the latest tech news from popular news magazines." />
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://metatags.io/" />
+<meta property="og:title" content="Tech news live ticker (Lumicoo.net)" />
+<meta property="og:description" content="Live feed of all the latest tech news from popular news magazines." />
+<meta property="og:image" content="https://i.ibb.co/xHYyjqF/IMG-8663.jpg" />
+
+<meta name="twitter:card" content="Get the latest tech news updates, summaries, and breaking news on Lumicoo.net. Stay informed about the latest technology trends and innovations.">
+<meta name="twitter:title" content="Tech news live ticker (Lumicoo.net)">
+<meta name="twitter:description" content="Live feed of all important tech news with a summary. Up-to-date and only the most important.">
+<meta name="twitter:image" content="https://i.ibb.co/xHYyjqF/IMG-8663.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LiveBlogPosting",
+  "name": "Tech news live ticker (Lumicoo.net)",
+  "description": "Live feed of all important tech news with a summary. Up-to-date and only the most important.",
+  "image": "https://i.ibb.co/xHYyjqF/IMG-8663.jpg",
+  "publisher": "Lumicoo.net",
+}
+</script>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/n38QY94/favicon-32x32.png" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            background-color: #2E3CD1; /* Blue background color */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            font-family: 'Roboto', sans-serif;
+            color: #ffffff;
+            background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700" opacity="0.36"><defs><filter id="nnnoise-filter" x="-20%" y="-20%" width="250%" height="250%" filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse" color-interpolation-filters="linearRGB"><feTurbulence type="fractalNoise" baseFrequency="0.2" numOctaves="4" seed="15" stitchTiles="stitch" x="0%" y="0%" width="100%" height="100%" result="turbulence"></feTurbulence><feSpecularLighting surfaceScale="17" specularConstant="1.4" specularExponent="20" lighting-color="%23cccccc" x="0%" y="0%" width="100%" height="100%" in="turbulence" result="specularLighting"><feDistantLight azimuth="3" elevation="100"></feDistantLight></feSpecularLighting></filter></defs><rect width="100%" height="100%" fill="transparent"></rect><rect width="100%" height="100%" fill="%23cccccc" filter="url(%23nnnoise-filter)"></rect></svg>');
+            background-size: 700px 700px;
+            background-repeat: repeat;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .header-container {
+            text-align: center;
+        }
+
+        .lumicoo-text {
+            margin: 0;
+            padding: 0;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 30px;
+            line-height: 1.2;
+        }
+
+        .news-item {
+            margin-bottom: 20px;
+        }
+        .news-item h2 {
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            font-size: 21px;
+            margin: 0;
+            color: #ffffff;
+        }
+        .news-item .news-date {
+            color: #ffffff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-style: italic;
+        }
+        .news-item p {
+            margin: 5px 0 10px 0;
+        }
+        .news-item a {
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: 0;
+            border-top: 2px solid #ffffff;
+            margin: 20px 0;
+        }
+        .news-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .load-more {
+            display: block;
+            width: 100px;
+            text-align: center;
+            margin: 20px auto;
+            padding: 5px 10px;
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .load-more:hover {
+            background-color: #cccccc;
+        }
+        .icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .icons img {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+        #search-container {
+            display: none;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #search-container input {
+            padding: 10px;
+            width: 60%;
+            max-width: 400px;
+            border: 1px solid #ffffff;
+            border-radius: 0px;
+            margin-right: 5px;
+            background-color: #2E3CD1;
+            color: #ffffff;
+        }
+        #search-container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #ffffff;
+            color: #2E3CD1;
+            border-radius: 0px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        #search-container button:hover {
+            background-color: #cccccc;
+            color: #2E3CD1;
+        }
+        .highlighted {
+            background-color: DF3CD1;
+            text-color: FFFFFF;
+        }
+
+        .news-ticker {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle; /* Zentriert vertikal */
+        }
+
+        .news-ticker:before {
+            content: '';
+            position: absolute;
+            top: -9px; /* Ändere die Position des Punktes */
+            left: -9px; /* Anpassung für die Position */
+            transform: translateY(-0%);
+            width: 14px; /* Größere Größe des Punktes */
+            height: 14px; /* Größere Größe des Punktes */
+            background-color: #DF3CD1; /* Roter Punkt */
+            border-radius: 50%;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        .favicon-circle {
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: inline-block;
+            height: 18px;
+            width: 18px;
+            text-align: center;
+            line-height: 15px;
+        }
+
+        .favicon-circle img {
+            vertical-align: middle;
+        }
+
+        /* Cookie Banner Styles */
+
+.cookie-banner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 0px;
+  /* Add max-width and width to ensure it doesn't overflow on mobile */
+  max-width: 90vw;
+  width: 300px;
+}
+
+.cookie-banner button {
+  background-color: #F024D7;
+  border: none;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+  width: 100%;
+}
+
+.cookie-banner button:hover {
+  background-color: #cccccc;
+  color: #2E3CD1;
+}
+
+/* Add styles for the decline button */
+
+.cookie-banner button.decline-btn {
+  background-color: #2E3CD1; /* darker blue */
+}
+
+/* Media query remains the same */
+@media only screen and (max-width: 768px) {
+ .cookie-banner {
+    padding: 15px;
+    width: 100%;
+  }
+ .cookie-banner button {
+    width: 100%;
+    font-size: 12px;
+  }
+}
+.cookie-banner a {
+  text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <p class="lumicoo-text">Lumicoo.net</p>
+        <h1><span class="news-ticker"></span>TECH NEWS LIVE TICKER</h1>
+    </div>
+
+<div class="icons">
+        <img id="refresh-icon" src="data:image/png;base64, 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" alt="refresh">
+        <img id="search-icon" src="data:image/png;base64, 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" alt="search">
+        <img id="share-icon" src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAYKADAAQAAAABAAAAYAAAAACpM19OAAAEiUlEQVR4Ae2cTW4UMRCFM4CADUeAS4BYh21WHAKJHeImSOwicgd2bJM1yinmCKwgQhpehbHizrSrbL/uyfw8S1Z3266/r7pdmcyoT07UREAEREAEREAEREAEREAEREAEREAEREAEREAEREAEREAEDp3AojXA1Wr1BjIf0U/RX6E/RT/mdoPgl+hX6OeLxeIax+pWnQCAfw6tX9E/oFfLVXtyGAtXCOMC/RMS8bsmpCqQa/g/oPBdjVKtObkEg7OaJDyqhGV3vuBXwlqzMmZhC5+A9Z7/E5rCtaG141pg29HbqCbUPAFWcAW//eYxZsbObTUJOHU1aNIjELIL72xsQX9g4dj/1PQge3M32IKeeQvCOSQgat+x4GWo6MAWWMzoFrvb6LBd7XeTv3D6Gf0xbXDHFViM61gt5rDR4YQWhguucfmaNrqjCiw2dIuxutGhVFu6W/gXp1/QX9DGd0SBxbKOyWJranQITdaGi5e4fE878MAKLAZ0i6Wr0e53WR0K7WWRRghVRXYY6ubVLiTAvNqbIg1fm4rsJvLhyK4kIHm100UaTjYX2RRY6biNBLTukTtXpAGvp8je1rgS+DQ+ewLMABMA7SCpAL5TN1ACXTqS7t3CLem+Hc8NYKDnEX6QIg1fe4rsxhbqwsFkzqfrvNUA1vcUsa0V6an9a+XTnIReA5Cb5A5rdtgRgE+TP6G9fBw3h1OsAchTe+zQm74r+NBdZCOLLJ9IvxVYt4UKsAAKZgMQ2YftWW8AFw4mI//C+SkNQNfkW0ApANjayhY4JZ/RWKY2AH2zFum59d+HNDWf+/on2YI2lGIAjk9+h0Ln1p6wFNPeJiALgN6jAeEha4ybgxRn99HVjsluxZkgAxCydAIzV5pPZ+czu4EsZNjq2UIiF/P5jU+ymfmu01z52HmX0lxoTGk+lq+d4hy6e4p07tLY+WyftMeM5WM0k1zZ2DltoKAAtnqK9JiLs/6vacxgPlYIr344VzZ2Xq+pbyVstu7xyc2tfCWajJWOfVFnUiXFaTxbOtspbLX8lbPV7xsSh9KRhlJSnMZpAw0KYDMq0pMX2ci9xKF0jOTD+ZLiNB4qmHgB7I4V6dmKbOR+4lA6RvLhfElxGg8VzLQA9lORnrXIRu4nDqVjJF/z41z3wxZ+fBrqiJzY53kD7/kf8an5ebqnX3MkASWABMiKKwEsQVJeCSABsuJKAEuQlFcCSICsuBLAEiTllQASICuuBLAESXklgATIiisBLEFSXgkgAbLiSgBLkJRXAkiArLgSwBIk5ZUAEiArrgSwBEl5JYAEyIorASxBUv5Jhby9F7P4wqboO9EK/Ye8xNi5reYJWLoaNOkRCNnVJODKs6A5l0DIriYB5zDh/vTCdeF4J42ZsXNbmAD8rsXehWyv41VrI3CxZudKVf2oCoXW3hutVxe7KAeTl7ia7tXFyKS9iPoM/Ru6tiNAKDRjY4yq4JuOqifAFqaGp0Gvr08w/h+p19cPVelKBERABERABERABERABERABERABERABERABERABERABETgEAn8AxHBXweqvwDwAAAAAElFTkSuQmCC" alt="mail">
+        <a style="color: #ffffff;" href="https://www.lumicoo.net/tnlt-sources.html">
+            <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAYKADAAQAAAABAAAAYAAAAACpM19OAAADYklEQVR4Ae2dQW7VMBCG+xACBJyBK3SDWHVRtj0HUndsOQNbdhU9B4JVK9FVxYYr9Ay0Kt08/kGRnhMU541bPC/xZ2lUJ44zk+/3OHmx1OztUSAAAQhAAAIQgAAEIAABCEAAAhCAAARaIbC674Wu1+vXOsex7FD2SvZEtuRyp4u7kp3LTlar1Q/9LS7FAgj8M3n9JHsnKz5PceS70XGtME5l7yXEbUlIReA6+F/k8G2J0wX2OdM1HZWI8KgQho184G/gGQtj4i7uDOjm/Et5cvd1RzevDjYdvfHeE0oywG64wP93cBgTY+MqJQIcujy0dbCbjXskawr6LaZLf9QsHTZ3moKeejqXCGBz3WhRAO5zjp5sBxs0AB/0+kumoB3EMt+QECBYOwRAgGACwe7JAAQIJhDsngxoUQA9Su/LvsquO7P6/jYsdNx/LdvE8JDHuH802dXnApj6IabuBvpC9nJwnl/aPlD/n4P9vc0p/72DCza2iP9e1z8MKWIK+qgghvAtLttnbU2ViAy4FuHnI5RvNAJfjLT93U0G5OjQ5iYQMQV9z0SZa8t0m29ThAAfhMtuuMNi+6ytqVJdgO4p50CUv8luOrP65BOQjllcqX4TnjvBqYeAqcfY4fVXz4BhAK1vI0DwCEAABAgmEOyeDECAYALB7smAFgWwV9Iy1gMkfvUfYgZfflkP6DIvYgpiPSCZ9iIygPWARICIDEjcU40QIPfOP9e2SLUiBGA9IBlK1QVgPSChr2r1m3Df/fy2WA+Yn2bZiKtPQdloGmxEgGDREQABggkEuycDECCYQLD7kAxgPWCjevUfYqwHbOBbLSIDWA9INIjIANYDEgEiMiBxTzVCgNw7/1zbItWKEID1gGQoVReA9YCEvqrVb8J99/PbYj1gfpplI64+BWWjabARAYJFRwAECCYQ7J4MQIBgAsHuHxf4t/+fP/qPW6eekwv8zamLsXGVkinoyuWhrYPdbEoEOG+Lqetq3WxKBDhRSNn/GuUKeTkHGxNj4ypuAfQyzb6ZYp/toPQJnHZs+nsnttwv4+x8utHa92P4hMkG7pmq9T5hIqXtgzVHss+ylqcju3ZjUARf/fyvo61TWpQNfMYqBUIdAhCAAAQgAAEIQAACEIAABCAAAQhAAAIjBP4ArvBQcpNZzMAAAAAASUVORK5CYII=" alt="sources">
+        </a>
+    </div>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search for articles...">
+        <button id="search-button">Search</button>
+    </div>
+    <hr>
+    <div id="news" class="news-container">
+        <!-- News will be rendered here -->
+        <p id="no-news">News are loading…</p>
+    </div>
+    <a id="loadMore" class="load-more" href="#">Load more</a>
+    <div style="text-align: center;">
+        <small style="color: #ffffff; font-size: small;">
+            <a href="mailto:contact-tnlt@lumicoo.com">Email</a> / 
+            <a href="https://www.lumicoo.net/tnlt-sources.html">Sources</a>
+        </small>
+    </div>
+
+<div id="cookie-banner" class="cookie-banner">
+    <h3>Cookies</h3>
+    This website requires your consent to load content and set cookies from Google for statistical purposes. We use Google Analytics, Google Apps Script and a Google API for favicons. <a href="https://policies.google.com/technologies/cookies">More about G Analytics</a>
+    <button onclick="acceptCookies()">Accept</button>
+</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var searchContainer = document.getElementById('search-container');
+            var searchIcon = document.getElementById('search-icon');
+            searchIcon.addEventListener('click', function() {
+                if (searchContainer.style.display === "none" || searchContainer.style.display === "") {
+                    searchContainer.style.display = "block";
+                } else {
+                    searchContainer.style.display = "none";
+                }
+            });
+        });
+
+        function acceptCookies() {
+            document.getElementById('cookie-banner').style.display = 'none';
+            localStorage.setItem('cookiesAccepted', 'true');
+            loadExternalScripts();
+        }
+
+        function declineCookies() {
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        function loadExternalScripts() {
+            // Add your external script URLs here
+            var scripts = [
+                'https://cdn.example.com/script1.js',
+                'https://cdn.example.com/script2.js'
+            ];
+            scripts.forEach(function(src) {
+                var script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                document.head.appendChild(script);
+            });
+
+function loadGoogleAnalytics() {
+    var script = document.createElement('script');
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-69R3CTHPS1";
+    script.async = true;
+    document.head.appendChild(script);
+
+    script.onload = function() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-69R3CTHPS1');
+    };
+  }
+
+            // News fetching script
+            let currentPage = 0;
+            const newsPerPage = 10;
+
+            const newsContainer = document.getElementById('news');
+            const loadMoreButton = document.getElementById('loadMore');
+            const noNewsText = document.getElementById('no-news');
+            const refreshIcon = document.getElementById('refresh-icon');
+            const searchIcon = document.getElementById('search-icon');
+            const shareIcon = document.getElementById('share-icon');
+            const searchContainer = document.getElementById('search-container');
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+
+            const extractDomain = (url) => {
+                const link = document.createElement('a');
+                link.href = url;
+                return link.hostname.replace('www.', '');
+            };
+
+            const getFaviconUrl = (url) => {
+                const domain = extractDomain(url);
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            };
+
+            const highlightSearchResults = (text, searchTerm) => {
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                return text.replace(regex, `<span class="highlighted">$&</span>`);
+            };
+
+            const fetchNews = (page) => {
+                fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
+                .then(response => response.json())
+                .then(news => {
+                    const filteredNews = news.filter(item => item.show === 'yes');
+                    const start = page * newsPerPage;
+                    const end = start + newsPerPage;
+                    const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
+
+                    const newsToDisplay = reversedNews.slice(start, end);
+
+                    if (newsToDisplay.length === 0 && page === 0) {
+                        noNewsText.style.display = 'block';
+                        loadMoreButton.style.display = 'none';
+                        return;
+                    } else if (newsToDisplay.length === 0) {
+                        loadMoreButton.style.display = 'none';
+                        return;
+                    }
+
+                    noNewsText.style.display = 'none';
+
+                    const newsHTML = newsToDisplay.map(item => {
+                        const date = new Date(item.date);
+                        date.setDate(date.getDate() + 1)
+                        const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
+                        const domain = extractDomain(item.link);
+                        const faviconUrl = getFaviconUrl(item.link);
+                        const highlightedTitle = highlightSearchResults(item.title, searchInput.value); // Highlight search input in title
+                        return `
+                            <div class="news-item">
+
+<p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
+
+                                <h2>${highlightedTitle}</h2>
+                                <div class="news-date">${formattedDate}</div>
+                                <p><a href="${item.link}" target="_blank">Read more</a></p>
+                            </div>
+                            <hr>
+                        `;
+                    }).join('');
+
+                    newsContainer.innerHTML += newsHTML;
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+            const refreshNews = () => {
+                newsContainer.innerHTML = '';
+                currentPage = 0;
+                fetchNews(currentPage);
+            };
+
+            const searchNews = (query) => {
+                fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
+                .then(response => response.json())
+                .then(news => {
+                    const filteredNews = news.filter(item => item.show === 'yes' && item.title.toLowerCase().includes(query.toLowerCase()));
+                    const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
+
+                    if (reversedNews.length === 0) {
+                        newsContainer.innerHTML = '<p>No results found.</p>';
+                        loadMoreButton.style.display = 'none';
+                        return;
+                    }
+
+                    noNewsText.style.display = 'none';
+                    loadMoreButton.style.display = 'none'; // Hide load more button for search results
+
+                    const newsHTML = reversedNews.map(item => {
+                        const date = new Date(item.date);
+                        date.setDate(date.getDate() + 1)
+                        const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
+                        const domain = extractDomain(item.link);
+                        const faviconUrl = getFaviconUrl(item.link);
+                        const highlightedTitle = highlightSearchResults(item.title, query); // Highlight search query in title
+                        return `
+                            <div class="news-item">
+
+<p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
+
+                                <h2>${highlightedTitle}</h2>
+                                <div class="news-date">${formattedDate}</div>
+                                <p><a href="${item.link}" target="_blank">Read more</a></p>
+                            </div>
+                            <hr>
+                        `;
+                    }).join('');
+
+                    newsContainer.innerHTML = newsHTML;
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+            loadMoreButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentPage++;
+                fetchNews(currentPage);
+            });
+
+            refreshIcon.addEventListener('click', refreshNews);
+
+            searchIcon.addEventListener('click', () => {
+                searchContainer.style.display = searchContainer.style.display === 'none' ? 'block' : 'none';
+            });
+
+            searchButton.addEventListener('click', () => {
+                const query = searchInput.value;
+                searchNews(query);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const query = searchInput.value;
+                    searchNews(query);
+                }
+            });
+
+            shareIcon.addEventListener('click', () => {
+                const emailLink = 'mailto:contact-tnlt@lumicoo.com';
+                window.open(emailLink, '_blank');
+            });
+
+            fetchNews(currentPage); // Load initial news on page load
+        }
+
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('cookiesAccepted') === 'true') {
+                document.getElementById('cookie-banner').style.display = 'none';
+                loadExternalScripts();
+            }
+        });
+    </script>
+</body>
+</html>
