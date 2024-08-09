@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karen Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: white;
+        }
+        #map {
+            height: calc(100% - 50px);
+            width: 100%;
+            position: relative;
+        }
+        #info {
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            display: none;
+            z-index: 1000;
+        }
+        #info h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        #info h3 {
+            margin: 5px 0 10px 0;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            font-size: 26px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        #info img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        #info .close-btn {
+            position: absolute;
+            top: 5px;
+            font-size: 26px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        #info time {
+            font-size: 0.9em;
+            color: gray;
+        }
+        #info .karen-id {
+            font-size: 0.9em;
+            color: gray;
+            text-align: left;
+        }
+        #header {
+            width: 100%;
+            height: 45px;
+            background: #F5F5F7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #header h1 {
+            margin: 0;
+            font-size: 21px;
+            color: #000000;
+        }
+        #header .plus-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: #000000;
+        }
+        #header .icon-btns {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        #header .icon-btns img[alt="Whats this?"] {
+            color: #000000;
+            width: 23px;
+            height: 23px;
+        }
+        #header .icon-btns .custom-icon {
+            width: 26px;
+            height: 26px;
+            margin-right: 8px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 27px;
+            height: 27px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .logo {
+            width: 33px;
+            height: 33px;
+            margin-right: 5px;
+        }
+        #disclaimer {
+            position: absolute;
+            bottom: 60px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 0px;
+            font-size: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        ::selection {
+            background: #ff9999; 
+            color: #000000; 
+            border-radius: 5px;
+        }
+.my-infopopup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  min-width: 300px;
+  max-width: 400px;
+  transform: translateX(-50%);
+  z-index: 9999; 
+  background-color: transparent;
+  display: none;
+}
+
+.my-infopopup-content {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.my-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div id="header">
+    <img src="https://i.ibb.co/H2kR3TL/IMG-3641.png" alt="Logo" class="logo">
+            <h1>Karen Radar</h1>
+        <div class="icon-btns">
+            <img class="custom-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAABOpJREFUeF7tnWFymzAQRsE+WOLLmMkpXJ8iY18mzsECrVJrhjpgtJJYserrv04E7LdP32oRadU2/Kk6A23V6hDXALjySQBgAFeegcrl4WAAV56ByuXhYABXnoHK5eFgAFeegcrl4WAAV56ByuXhYABXnoHK5Zly8Pv7++uYx9vb261yPsnyNg3YA93v96dhGP6B65W3bXsbhuGz67pfydkodAOnc7fbvbZt++JCyKlnc4BDoD7hcHY/swLbaX02eZumOadq2QzgALFSf20StlRn3/eHlKWoKGCpWCnh0fiisMcleG6pmdPmlqDj8XiI1a4OWBHqXE7Ofd/fUlwRmuwcWk0AziE0NKnCcdlhr6G167poI0ZfuJTINYQuPTP25zk68TX1bgbwmiJj4Umvk8DW0lsc8L2J+JAm08D4H81Z4mtclOSigC+Xi9tgOEVFbuuis9uIkHbBOSQWA/wfwc3BKfoexQBfr9ePtWa0Wwu/vr7Ou90utPQXc1g0ucALiwG+XC5DYIxBwzzU8Ttq6DPGSXCVpVQ5DRL6Zw/y3sxN7q8/3sM04CmoY4ExgP31fgdpKz3Co9YUbcETKXTg1LjQAB+vXYKaC/D4PiVhz+kNzZ8JB0ugrgH44Z7+0+Jq3X+I3moAp8zAtZNwfxNw/JNhO6juRq45DNnrXlubiyVpq1IjQI1neHfHwg5xa8oSl2IQAM80IRoTS+MZAAbwfJ+tMQM1nlGqfGpow8E4GAc/2ytIaYBwcNM0GkmgRFdexgAM4NkqTYn++4vo0c0cJTotf9GJd1NaI/kaz6BEU6Ip0ZZfJXAwDsbBOPhZBqZ/ptFf0GRVXp0ADGD2oi0vPzgYB+NgHLzQQLJVSRc9O0U0XiXY6Kh8nQIwgNnJstyI4GAcjINxMHvR8gwo/VIBJZoSTYmmRMsLlMY7PnvRlVcnAAOYjw2Wlx8cjINxMA7mc6G8hVZ6x6dEU6Ip0ZRoSjQlOioDSusUe9GVr1MABjAfGyw3IjgYB+NgHCxvI/lcSBf9PWtS/uEAO1mVLz8ABjBblZb7CxyMg3EwDuZjg/wdSekNgRJNidYv0QnHtmY7yl1jE0LjGZtxsIfqplOm8xCTYK+dfMmRvKY3OhLcKln3xLDXABx79rA5wEpQ5ybAue/729LBVbkAx0IdB28GcGGwU8BnYacAzgHVFGDJUaqSuptr7D2+z67r/JmG4v8LOzdUU4BzgdC4j4cdepZh3/eH/X5/ytQY/pDo4jkej4dY7SpddGxwXPedgfO4skhzYg6w1GHShGxsfBJcp8UEYH+6pwv44fj31c8BLgXclf6lTj8ktk0Dlhzb6o6Gbdv2Za21MCSZqWMkekOftTnAOURagp1D7zPYmwG8htD7duBraEcc6orUcWtonYspCfD1ev1IKYmaQkvD1tQ6hq0O2HfBIduFqU6Zuz72KHdpPKWgZgMs+SKyBbFTgHLD3prOJAe7hN0TdJpK3tbELjkwFvbca9zS8zR+ngzYB+k7V/f3YRg+S5bgHIlb6sS3DDVbic6RSAv38B8SfKw5NiC0dGdzsFbAPEeWAQDL8mVuNIDNIZMFDGBZvsyNBrA5ZLKAASzLl7nRADaHTBYwgGX5MjcawOaQyQIGsCxf5kYD2BwyWcAAluXL3GgAm0MmCxjAsnyZGw1gc8hkAf8GKF/4xP76YEIAAAAASUVORK5CYII=" alt="">
+           
+                <img id="my-open-popup" class="custom-icon question-mark-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAABJhJREFUeF7tnQly2zAMRZ2TtT1Zm5M1PVlbTIQZWpEtkIBM4PN7JpPFlAz+RyxcYr/d+IBW4A26d+zcjYDBBwEBEzC4AuDdowcTMLgC4N2jBxMwuALg3aMHEzC4AuDdowcTMLgC4N2jBxMwuALg3UP14O+3202+9PFt+6H920fz/J//7fX39u/l8SMB/rXR+OmkooDfG+jOW867HAGwgPVCfUZAgJeFXRnw1WD30EuCrgj41WD3oMWbNR3Mi73GV64GeDZclVW8+YdR46nNqgCW6vf3VKWOX1wgp666KwDO4rWPxlfqkJ0dcFbP3cNO68mZAVeBq7BTapnSqE0xybntylPCFHxnUsrCKyvganCVdLp8nBFw9qLqLJKk0jSVMVtIvmI6pFMZ2VTQjQcBdUUKSOXF2QBHhmYRWh5nq0668xS5np2mqkYE7PGgqAHmseEsBXQ9jwY4QljxaPFmb/hOoW0KI5oh6fGg6LDosUW6lELbFEY0gEcr6AjPPQp9f7vi4X3jq2zqMikb4JHVqyuFHB1wAiHFwkc2wFr1WivaK+Gqp4x6MQE/iTUWz3kF3N4Bt+/SdAeabsBJQhHQ7YlI69y2K08ZbLBGFAKOVP5F9xqpC9S06Q403YAXQfK+zGgejp66dfeDgG2SEbBNp5KtGKJLYrMbTcB2rUq2tEzZjjrGeXAR3KNr0gRcALAnPBNwAcCj3itdmz5FEiM4TXo8ykZzb5qNBgJ+DNcTmtN4LwEfA/bCTaUrQ/RXyJ68K3d71S6XqYQh4HuZvHBTeW86Y0xD8rpGEXBTVM6tRPTgz9OTEYftU4Vmhbw64Ci4KRY1joLbyoDh4a6cg6Pgpprz0oM/FVgG7ooevBTc1QAvB3c1wKPnqvapLd1c99nSwCpVdMQiRrplSMuazwqAPdt+rYYpFzLOIKMDjsq7JeGukIMjQnNZuCsA9hZWpeGiA/aG5/Jw0QF7wnPazYOzomr/PGqR5fXeUnPdFefBHsAw3oscoj1zXxjvJeDj2EbAvYl+QvvRAgsqPCN7MAFvXoVaRY/mYKjwjOzBo4DhBjxch5p83xum4bwX2YOVs3UtGmJZcsVDd5a3BoaFu4IH66BW0HqqUqZD8vb+Z+8GP2GGF/uSyDk4VqmidyPgouCsZhOwVami7Qi4KDir2QRsVapoOwIuCs5qNgFblSrajoCLgrOaTcBWpYq2I+Ci4KxmrwBYlyPlwz304+p0qVK+6yeTWjUr1Q4ZsGWjQWAJYNlwgASNCnhkwx9yVwkR8AhcDbtwkNEAew68K2Sokx1ogHuP6RwVTFBHZ5EAR3gvXKhGAuzJvXtPhsnFSIAjwrOChgnTSICtJyitCxUQ2kB0YiNGwAdDFwkwQzQ4YBZZBGxNvzk+1Mps7ZOGSCFauhkRpmEqaBEEDXDEYgeXKiNCx4X38ORimAUO1RfNg7VfI5Dh4CKG6DYwcMMfMAcfRX4BLV9HR3akPfR/GKKG6AtTfK1bE3AtXt3WEnC3ZLUuIOBavLqtJeBuyWpdQMC1eHVbS8DdktW6gIBr8eq2loC7Jat1AQHX4tVt7T/hZrt5xRt0gAAAAABJRU5ErkJggg==" alt="Whats this?">
+            </a>
+            <a href="https://www.lumicoo.net/karenradar/report-karen" style="position: relative; top: 2px;">
+                <img class="plus-btn" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAAy9JREFUeF7t3VtOK0EMhOFmZcDKgJUBKwNaJCLiJqPYTrn45wUeGo9dX3o0SPQ5V4vLOoEr6+kYbgFs/iEAGGDzBMzHYwcDbJ6A+XjsYIDNEzAfjx0MsHkC5uOxgwE2T8B8PHYwwOYJmI/HDgbYPAHz8djBAJsnYD4eOxhg8wTMx2MHA2yegPl47GCAzRMwH++/7OCbtdbdWmt/3dfTWuv57Zt7c99/8XfRG3Hjfnc9uCO77+DfcI/gt4cdbbmZ3YEfTx7LPwHux/VGtrzcgV+CarY52A52gAU4+AmfugzgqXLBvgEOBjV1GcBT5YJ9AxwMauoygKfKBfsGOBjU1GUAT5UL9g1wMKipywCeKhfsG+BgUFOXATxVLtg3wMGgpi4DeKpcsG+Ag0FNXQbwVLlg3wAHg5q6DOCpcsG+AQ4GNXUZwFPlgn0DHAxq6jKAp8oF+wY4GNTUZQBPlQv2DXAwqKxln0/5ZdWdUqf9VGPnyYbIQbApUOf22XaqsQsY3K8fiZZTjV3AkVN+5+6KaT/fcqqxCzj6sjMN6dx+y/Mvv8EhAYC//yiU519+g8NcPKK/Als9ovevRxuZ6yOBljfprh28x+JNuhl3364T+Ih8Hfh3M1x3+n4s7527v7Zc3cAtQ53cJPpyZ5uD7WB/fHu3zcF2MIDfEwDYPAeAAe5+L0q9Hy9ZqXHqFQNYzyS1I4BT49QrBrCeSWpHAKfGqVcMYD2T1I4ATo1TrxjAeiapHQGcGqdeMYD1TFI7Ajg1Tr1iAOuZpHYEcGqcesUA1jNJ7Qjg1Dj1igGsZ5LaEcCpceoVA1jPJLUjgFPj1CsGsJ5JakcAp8apVyxyqrHllN+lonH/s9nIqcaWU34A1yXAf/Fel61M5Y18eqqx/ZTfpZJwf0RfKleZ+wIsQ1HTCMA1ucpUBViGoqYRgGtylakKsAxFTSMA1+QqUxVgGYqaRgCuyVWmKsAyFDWNAFyTq0xVgGUoahoBuCZXmaoAy1DUNAJwTa4yVQGWoahpBOCaXGWqAixDUdMIwDW5ylQFWIaiphGAa3KVqQqwDEVNIwDX5CpTFWAZippGAK7JVabqK2m3Wnm5XtjvAAAAAElFTkSuQmCC" alt="add">
+            </a>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div id="info">
+        <div id="info-content"></div>
+<img class="close-btn" onclick="closeInfo()" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAA6FJREFUeF7t3eFy00AMBGD3yYAngz4Z8GYgpmY8wTRn+U7a3a5n8qPTXCztZzlOmmleNm/SCbxId+fmNgOLHwQGNrB4AuLteYINLJ6AeHueYAOLJyDenifYwOIJiLfnCTaweALi7XmCDSyegHh7nmADiycg3p4n2MDiCYi35wk2sHgC4u15gg0snoB4e55gA4snIN6eJ9jA4gmIt9c1wZ+3bft6yPbntm0/3m4KkcP01wH87QH3CPr6+4f4PfMG1V81cBzZ35/oMSO/h7u3/aXyTFUNPBJABMGIPNpbPBUFcslWDRzTG1M8sjEhj+JG3wY+6DMgX8E18MloIyNfxS1/+qk+RY9cZJ2dvhGRM7jRm/RFVjSYDQYJmaaH6gnep5MmoJPTCVXtXcCsk0yFGyF3ArMh0+EiALMgU+KiAKMj0+IiAaMiU+OiAaMh0+MiAqMgS+CiAncjy+AiA3chS+GiA1cjy+EyAFchS+KyAK9GlsVlAl6FLI3LBjwbWR6XEXgW8ofAZQW+ixzrjx+6j59HNqQPHIzU++c+3X8uHC705I7ZKczskxKXHfjOJF9BpsVVAF6NTI2rArwKmR5XCXg2sgSuGvAsZBlcReC7yFK4Bv73WtrAV15fNNx3xmtjKWTmNzoej58ZuPtjyiCrAM/ElUJWAF6BK4PMDrwSVwKZGbgClx6ZFTiLGxdPsfnPhQ0vcUZ3eQc31t55M4Tu6pptgmfg7gfSzMcaPTjL78cEvAJkxWOWI763QxbglRArH7sdmwG4AqBiHy3Y6MCVwVfuqwwbGbgj8I59LsVGBe4MunPf07ERgRECRqhhCjYaMFKwSLWksZGAEQNFrOkSNgowcpDItT3FRgBmCJChxlPsbmCm4Jhq/YvdCcwYGF3NXcB0QR3Of1S1dwBTBfSfqxiaHqqB/S/9xf+lf+bIR/4URaYff63O4bSIjJv9ZIiB35JjwM0gG1j8q+1KD1zEi6zSAJ6+13ftDiPPyR/6e5OYcUdO1+X9VU/wHkK8XIrbp4cLqnh+Uthg+usCVkCk6MHAFEz5Ig2cz45ipYEpmPJFGjifHcVKA1Mw5Ys0cD47ipUGpmDKF2ngfHYUKw1MwZQv0sD57ChWGpiCKV+kgfPZUaw0MAVTvkgD57OjWGlgCqZ8kQbOZ0ex0sAUTPkiDZzPjmKlgSmY8kUaOJ8dxUoDUzDlizRwPjuKlQamYMoXaeB8dhQrDUzBlC/SwPnsKFb+AksE7HlIiS/cAAAAAElFTkSuQmCC" style="width: 23px; height: 23px;" alt="close">
+        <a href="https://www.lumicoo.net/karenradar/request-post-removal">
+            <img class="custom-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAAo9JREFUeF7tmFFOxDAMRLMnA04GnAw4GRC0Eoiixl574rS8lfjCsdN5HjfNpfErVeBSWp3iDQDFTQAAABQrUFweBwCgWIHi8jgAAMUKFJfHAQAoVqC4PA4AwEaBd7EmSzXdUpu5Cg8AcQeO0gNgpJD4/wBwCqwWzLmd6eGhMR5aPGlmT1fUWTCkYWgxAL4UCGkYWgwAADinhSQ81MShxTgAB0ha2pk01MShxThgDQf8bpjRd0EGdGeTusKn7l8hxtQHcElrC566fwBsoQDA1qiyKADIpLUlBoBNJ1kUAGTS2hIDwKaTLOrfA4gKUL3e1RkrHkOrBYzWB8BAgVHTAaBYQAAAwDXFNsHRDjr6epd6o3noSma8nh7VBMAtqv9Yc3QBo/t3yTfqRlcyHOCXCwBcR5/uJe6yAQ7AATjAZRlDcPQUcfT1Bom+QxhBjCBGkMsyhuCjj5Do/g0SMYL2RAIAt6EuE51uhuMAHIAD9hRIPbqnJuM21N+5AOBD7HQvcZcNcAAOwAEuyxiCo+foo683SMRVBFcROwrgAJeH8l9iAADArgKpJ8fUZHwJ+1sXAPkj1EUBAADgQ8xlGUNw9BRjKCENmbr/FUeQVF1DcgAYRFKGAECpriE3AAwiKUMAoFTXkBsABpGUIQBQqmvIfXoABg2WDkk9uqcmu8r20lq7X1rC2zf32lp7uH35dqUCwFNr7TFzkwvlev7cS3++tJ8CQN/caI6mPcDkRL37uwvSfioAZ3RBevd3iioAPfeZIEjEVwM4CwSZ+DMA9Br9RNT/7g50Oupz/i37hfvXi0M5gtJeVGdOBIBiugAAQLECxeVxAACKFSgujwMAUKxAcXkcAIBiBYrL4wAAFCtQXP4DyffMYXOgqZUAAAAASUVORK5CYII=" alt="delete post" style="position: absolute; bottom: 5px; width: 23px; heigth: 23px; right: 5px; cursor: pointer;">
+        </a>
+        </div>
+    
+    
+<div id="my-popup" class="my-infopopup">
+  <div id="my-popup-content" class="my-infopopup-content">
+    <h2>What's this?</h2>
+    <p>This is a map that shows where Karens have been spotted!<br><br> A "Karen" is a meme that refers to a particular type of entitled, middle-aged woman who always seems to be complaining about something. Think of her as the queen of drama and outrage. <br><br>This map is a crowdsourced project, which means anyone can report a Karen sighting and it'll get added to the map!<br><br>You can add a Karen yourself by clicking the plus icon in the top right corner!</p>
+    <img class="my-close-btn" onclick="closeMyInfo()" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAA6FJREFUeF7t3eFy00AMBGD3yYAngz4Z8GYgpmY8wTRn+U7a3a5n8qPTXCztZzlOmmleNm/SCbxId+fmNgOLHwQGNrB4AuLteYINLJ6AeHueYAOLJyDenifYwOIJiLfnCTaweALi7XmCDSyegHh7nmADiycg3p4n2MDiCYi35wk2sHgC4u15gg0snoB4e55gA4snIN6eJ9jA4gmIt9c1wZ+3bft6yPbntm0/3m4KkcP01wH87QH3CPr6+4f4PfMG1V81cBzZ35/oMSO/h7u3/aXyTFUNPBJABMGIPNpbPBUFcslWDRzTG1M8sjEhj+JG3wY+6DMgX8E18MloIyNfxS1/+qk+RY9cZJ2dvhGRM7jRm/RFVjSYDQYJmaaH6gnep5MmoJPTCVXtXcCsk0yFGyF3ArMh0+EiALMgU+KiAKMj0+IiAaMiU+OiAaMh0+MiAqMgS+CiAncjy+AiA3chS+GiA1cjy+EyAFchS+KyAK9GlsVlAl6FLI3LBjwbWR6XEXgW8ofAZQW+ixzrjx+6j59HNqQPHIzU++c+3X8uHC705I7ZKczskxKXHfjOJF9BpsVVAF6NTI2rArwKmR5XCXg2sgSuGvAsZBlcReC7yFK4Bv73WtrAV15fNNx3xmtjKWTmNzoej58ZuPtjyiCrAM/ElUJWAF6BK4PMDrwSVwKZGbgClx6ZFTiLGxdPsfnPhQ0vcUZ3eQc31t55M4Tu6pptgmfg7gfSzMcaPTjL78cEvAJkxWOWI763QxbglRArH7sdmwG4AqBiHy3Y6MCVwVfuqwwbGbgj8I59LsVGBe4MunPf07ERgRECRqhhCjYaMFKwSLWksZGAEQNFrOkSNgowcpDItT3FRgBmCJChxlPsbmCm4Jhq/YvdCcwYGF3NXcB0QR3Of1S1dwBTBfSfqxiaHqqB/S/9xf+lf+bIR/4URaYff63O4bSIjJv9ZIiB35JjwM0gG1j8q+1KD1zEi6zSAJ6+13ftDiPPyR/6e5OYcUdO1+X9VU/wHkK8XIrbp4cLqnh+Uthg+usCVkCk6MHAFEz5Ig2cz45ipYEpmPJFGjifHcVKA1Mw5Ys0cD47ipUGpmDKF2ngfHYUKw1MwZQv0sD57ChWGpiCKV+kgfPZUaw0MAVTvkgD57OjWGlgCqZ8kQbOZ0ex0sAUTPkiDZzPjmKlgSmY8kUaOJ8dxUoDUzDlizRwPjuKlQamYMoXaeB8dhQrDUzBlC/SwPnsKFb+AksE7HlIiS/cAAAAAElFTkSuQmCC" style="width: 23px; height: 23px;" alt="close">
+  </div>
+</div>
+
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+    var map = L.map('map').setView([39.8283, -98.5795], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        fetch('https://script.google.com/macros/s/AKfycbwWrG2i91gXCBMXNU3M8qSJ3WMMOTXDys1uS7_a5W8iMxvtBX0ZP6otpgy2j3ox3zBGWg/exec')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(point => {
+                    var originalDateTime = point.Date;
+                    var date = new Date(originalDateTime);
+                    var formattedDateTime = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+                    point.Date = formattedDateTime;
+
+                    var coords = point.Coords.split(',').map(Number);
+                    var customIcon = L.icon({
+                        iconUrl: 'data:image/png;base64,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',
+                        iconSize: [33, 33],
+                        iconAnchor: [20, 40],
+                        popupAnchor: [0, -40]
+                    });
+
+                    var marker = L.marker(coords, { icon: customIcon }).addTo(map)
+                        .on('click', function() {
+                            showInfo(point);
+                        });
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        function showInfo(point) {
+            var infoContent = `
+                <div class="info-item">
+                    <h2>${point.Title}</h2>
+                    <h3>${point.Subtitle}</h3>
+                    <div>${point.Image}</div>
+                    <hr>
+                    <small>The location provided may be inaccurate or imprecise.</small>                    <br><p></p>
+                    <time><strong>Date:</strong> ${point.Date}</time>
+                    <div class="karen-id"><strong>Post-ID:</strong> ${point["Karen-ID"]}</div>
+                </div>
+            `;
+            document.getElementById('info-content').innerHTML = infoContent;
+            document.getElementById('info').style.display = 'block';
+        }
+
+        function closeInfo() {
+            document.getElementById('info').style.display = 'none';
+        }
+        
+        
+const myOpenPopupImage = document.getElementById('my-open-popup');
+const myPopup = document.getElementById('my-popup');
+const myClosePopupButton = document.getElementById('my-close-btn');
+
+myOpenPopupImage.addEventListener('click', () => {
+  myPopup.style.display = 'block';
+});
+
+myClosePopupButton.addEventListener('click', () => {
+  myPopup.style.display = 'none';
+});
+
+function closeMyInfo() {
+  myPopup.style.display = 'none';
+}
+    </script>
+</body>
+</html>
