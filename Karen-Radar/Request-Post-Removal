@@ -1,0 +1,260 @@
+<html>
+
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="GoogleSheet.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat; 
+      color: white; 
+    }
+
+    .container {
+      text-align: left;
+      margin-top: 50px;
+    }
+
+    form {
+      padding: 20px;
+      background-color: #ffffff;
+      width: 80vw;   
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form h4 {
+      margin: 0 0 10px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      color: #333;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    #submit {
+            padding: 10px 20px;
+            text-align: left;
+            background-color: #FF5756;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+    }
+
+    #submit:hover {
+      background-color: #d63535;
+    }
+        #header {
+            width: 100%;
+            height: 50px;
+            background: #F5F5F7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #header h1 {
+            margin: 0;
+            font-size: 21px;
+            color: #000000;
+        }
+        #container h2 {
+            margin: 0;
+            font-size: 21px;
+            color: #000000;
+        }
+        #header .plus-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: #000000;
+        }
+        #header .icon-btns {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        #header .icon-btns img[alt="Whats this?"] {
+            color: #000000;
+            width: 23px;
+            height: 23px;
+        }
+        #header .icon-btns .custom-icon {
+            width: 26px;
+            height: 26px;
+            margin-right: 8px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 27px;
+            height: 27px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .logo {
+            width: 33px;
+            height: 33px;
+            margin-right: 5px;
+        }    
+        ::selection {
+            background: #ff9999; 
+            color: #000000; 
+            border-radius: 5px;
+        }
+.my-infopopup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  min-width: 300px;
+  max-width: 400px;
+  transform: translateX(-50%);
+  z-index: 9999; 
+  background-color: transparent;
+  display: none;
+}
+
+.my-infopopup-content {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.my-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+    <div id="header">
+    <img src="https://i.ibb.co/H2kR3TL/IMG-3641.png" alt="Logo" class="logo">
+        <a href="https://www.lumicoo.net/karenradar/map" style="position: relative; text-decoration: none; top: 2px; color: black !important;">
+        <h1>Karen Radar</h1>
+        </a>
+
+            <a href="https://www.lumicoo.net/karenradar/map" style="position: relative; top: 2px; color: black !important;">
+
+        <div class="icon-btns">
+            <img class="custom-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAA6VJREFUeF7tnQtu3DAMRJ2TNT1Z2pMlPVkbblYBYfgzI5GmXIyBIAjAlah54sfeXeVl0VWqwEvp7Jp8EYDiTSAAAlCsQPH0igABKFageHpFgAAUK1A8vSJAAIoVKJ5eESAADwVenzq03/bnr2JtLpm+MgKa2G8OwHrRH8uy/JkQhvnu/f79uQbz1X6o62oAiOh7C7BFVkbGWvQtP3+yEK4AMCL6DDAQ4ZufFgEGAb4yATCOww5vGGZExojvlKaUMaDSiOPA8Kcm3bn4WYfM/x8HNenUgWXhHvFHAKgW/ShNIYUx2n9KU8p4tVJrE60TmP3a6qSiRfcaUJpSxm6W98EwrYLW2kR/vxHtC6UpZezawDvs/Ghh0fEoTSnjpwd/UU8O7GwntoJ5Np752O6K7wCe0pQyHgTgRfdsEADevgIGu2HgPZoNYE/0EQBrGKNt455YrV60SG127IY5hJEBABE9CkAGjDP/pwfAQg1dkLuhYurFmegZG+YxJiuWvSZasOjxvFjWblrLfHSxD9BC/f3fAUy/YQSAzwKKALjH+zIMFSx6PEWAIiB8h64DRBFwkjKiBRKA4hwtAAKAK6AirCKsIozHyw366o3FRBf50PGUgpSClIKUgjgFlII4vcIjTAAE4FgBtrCH7ih1QcVdhQAIAJUBKOPn7opOGdHj6WFccZEUAAHAFVAKKq5ZAiAA4XeqqgF4Bkz52IgACACugGqAaoBqAB4veksy/KOOSkFKQUpBSkGcAqEPD5WClIKUgrgAnPwLD3pHrDikBUAAqLpKGestyfiHhwJQHLHVADK+SK3H0UBb1XNiVe95cKE3Tnf+mmqP6Fss2cNcowCg/lNZhTLuKMLNaXtpxjFhCIwRAKjofqNQmlLGBIAex4HMdWiyd34oC2DUd0pTyhgEMCpkxOs9DATAqOhTRUCEgHcdw8BTp77PFgFXHCuZBZc+N9ocmQXA1olVtpOyzoOLhkDv/OZAJQD0mDDLz76bihavdzzU/8PxrwbQ2kbkTOctx6thhIjeXbEHuqBwx12xYw7n69ntGb5/+9ETAei50amOr5SMPsy1+W7T0P+WhKHcA+DsAdqVwm+ttRfGZaKPpqD2WMEXxmrR9zbdWSdVInoEACbKZrH1N0gtraSmF2ThPSkIGVc2oAICAAqVZSYAWcqC4woAKFSWmQBkKQuOKwCgUFlmApClLDiuAIBCZZkJQJay4LgCAAqVZSYAWcqC4woAKFSW2T/DuTpwUCMcxwAAAABJRU5ErkJggg==" alt="">
+ </a>
+ <img id="my-open-popup" class="custom-icon question-mark-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAABJhJREFUeF7tnQly2zAMRZ2TtT1Zm5M1PVlbTIQZWpEtkIBM4PN7JpPFlAz+RyxcYr/d+IBW4A26d+zcjYDBBwEBEzC4AuDdowcTMLgC4N2jBxMwuALg3aMHEzC4AuDdowcTMLgC4N2jBxMwuALg3UP14O+3202+9PFt+6H920fz/J//7fX39u/l8SMB/rXR+OmkooDfG+jOW867HAGwgPVCfUZAgJeFXRnw1WD30EuCrgj41WD3oMWbNR3Mi73GV64GeDZclVW8+YdR46nNqgCW6vf3VKWOX1wgp666KwDO4rWPxlfqkJ0dcFbP3cNO68mZAVeBq7BTapnSqE0xybntylPCFHxnUsrCKyvganCVdLp8nBFw9qLqLJKk0jSVMVtIvmI6pFMZ2VTQjQcBdUUKSOXF2QBHhmYRWh5nq0668xS5np2mqkYE7PGgqAHmseEsBXQ9jwY4QljxaPFmb/hOoW0KI5oh6fGg6LDosUW6lELbFEY0gEcr6AjPPQp9f7vi4X3jq2zqMikb4JHVqyuFHB1wAiHFwkc2wFr1WivaK+Gqp4x6MQE/iTUWz3kF3N4Bt+/SdAeabsBJQhHQ7YlI69y2K08ZbLBGFAKOVP5F9xqpC9S06Q403YAXQfK+zGgejp66dfeDgG2SEbBNp5KtGKJLYrMbTcB2rUq2tEzZjjrGeXAR3KNr0gRcALAnPBNwAcCj3itdmz5FEiM4TXo8ykZzb5qNBgJ+DNcTmtN4LwEfA/bCTaUrQ/RXyJ68K3d71S6XqYQh4HuZvHBTeW86Y0xD8rpGEXBTVM6tRPTgz9OTEYftU4Vmhbw64Ci4KRY1joLbyoDh4a6cg6Pgpprz0oM/FVgG7ooevBTc1QAvB3c1wKPnqvapLd1c99nSwCpVdMQiRrplSMuazwqAPdt+rYYpFzLOIKMDjsq7JeGukIMjQnNZuCsA9hZWpeGiA/aG5/Jw0QF7wnPazYOzomr/PGqR5fXeUnPdFefBHsAw3oscoj1zXxjvJeDj2EbAvYl+QvvRAgsqPCN7MAFvXoVaRY/mYKjwjOzBo4DhBjxch5p83xum4bwX2YOVs3UtGmJZcsVDd5a3BoaFu4IH66BW0HqqUqZD8vb+Z+8GP2GGF/uSyDk4VqmidyPgouCsZhOwVami7Qi4KDir2QRsVapoOwIuCs5qNgFblSrajoCLgrOaTcBWpYq2I+Ci4KxmrwBYlyPlwz304+p0qVK+6yeTWjUr1Q4ZsGWjQWAJYNlwgASNCnhkwx9yVwkR8AhcDbtwkNEAew68K2Sokx1ogHuP6RwVTFBHZ5EAR3gvXKhGAuzJvXtPhsnFSIAjwrOChgnTSICtJyitCxUQ2kB0YiNGwAdDFwkwQzQ4YBZZBGxNvzk+1Mps7ZOGSCFauhkRpmEqaBEEDXDEYgeXKiNCx4X38ORimAUO1RfNg7VfI5Dh4CKG6DYwcMMfMAcfRX4BLV9HR3akPfR/GKKG6AtTfK1bE3AtXt3WEnC3ZLUuIOBavLqtJeBuyWpdQMC1eHVbS8DdktW6gIBr8eq2loC7Jat1AQHX4tVt7T/hZrt5xRt0gAAAAABJRU5ErkJggg==" alt="Whats this?">
+            <a href="https://www.lumicoo.net/karenradar/report-karen" style="position: relative; top: 2px;">
+                <img class="plus-btn" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAAy9JREFUeF7t3VtOK0EMhOFmZcDKgJUBKwNaJCLiJqPYTrn45wUeGo9dX3o0SPQ5V4vLOoEr6+kYbgFs/iEAGGDzBMzHYwcDbJ6A+XjsYIDNEzAfjx0MsHkC5uOxgwE2T8B8PHYwwOYJmI/HDgbYPAHz8djBAJsnYD4eOxhg8wTMx2MHA2yegPl47GCAzRMwH++/7OCbtdbdWmt/3dfTWuv57Zt7c99/8XfRG3Hjfnc9uCO77+DfcI/gt4cdbbmZ3YEfTx7LPwHux/VGtrzcgV+CarY52A52gAU4+AmfugzgqXLBvgEOBjV1GcBT5YJ9AxwMauoygKfKBfsGOBjU1GUAT5UL9g1wMKipywCeKhfsG+BgUFOXATxVLtg3wMGgpi4DeKpcsG+Ag0FNXQbwVLlg3wAHg5q6DOCpcsG+AQ4GNXUZwFPlgn0DHAxq6jKAp8oF+wY4GNTUZQBPlQv2DXAwqKxln0/5ZdWdUqf9VGPnyYbIQbApUOf22XaqsQsY3K8fiZZTjV3AkVN+5+6KaT/fcqqxCzj6sjMN6dx+y/Mvv8EhAYC//yiU519+g8NcPKK/Als9ovevRxuZ6yOBljfprh28x+JNuhl3364T+Ih8Hfh3M1x3+n4s7527v7Zc3cAtQ53cJPpyZ5uD7WB/fHu3zcF2MIDfEwDYPAeAAe5+L0q9Hy9ZqXHqFQNYzyS1I4BT49QrBrCeSWpHAKfGqVcMYD2T1I4ATo1TrxjAeiapHQGcGqdeMYD1TFI7Ajg1Tr1iAOuZpHYEcGqcesUA1jNJ7Qjg1Dj1igGsZ5LaEcCpceoVA1jPJLUjgFPj1CsGsJ5JakcAp8apVyxyqrHllN+lonH/s9nIqcaWU34A1yXAf/Fel61M5Y18eqqx/ZTfpZJwf0RfKleZ+wIsQ1HTCMA1ucpUBViGoqYRgGtylakKsAxFTSMA1+QqUxVgGYqaRgCuyVWmKsAyFDWNAFyTq0xVgGUoahoBuCZXmaoAy1DUNAJwTa4yVQGWoahpBOCaXGWqAixDUdMIwDW5ylQFWIaiphGAa3KVqQqwDEVNIwDX5CpTFWAZippGAK7JVabqK2m3Wnm5XtjvAAAAAElFTkSuQmCC" alt="add">
+            </a>
+        </div>
+    </div>
+  <div class="container">
+    <form method="post" action="https://script.google.com/macros/s/AKfycbyvmrUMWQB8NHEkAprpuvgKxsUTBnvkB8wcLxYEjXEW2ZE0CMMcdiTwAJfHpadrLdH9/exec">
+    <h2 style="color: #000000;">Request post removal</h2>
+
+                       <label for="your-name" style="color: #000000;">Post ID</label>
+                  <input type="text" name="Post-ID" placeholder="">
+            <small style="color: #000000;">You can find the post ID at the bottom of each post.</small>
+    <br><p></p>
+
+                 <label for="Post-ID" style="color: #000000;">Your name</label>
+      <input type="text" name="your-name" placeholder="">
+      <label for="your-email" style="color: #000000;">Your email</label>
+      <input type="email" name="your-email" placeholder="">
+      <label for="message" style="color: #000000;">Message (optional)</label>
+      <textarea name="message" rows="3" placeholder=""></textarea>
+<hr>
+      <input type="submit" value="Send" id="submit">
+            <p style="color: #000000;">We will contact you via email.</p>
+
+    </form>
+  </div>
+<p></p><br>
+<p style="text-align: center; color: #000000;">
+  <a href="https://www.lumicoo.net/karenradar/contact" style="text-decoration: none; color: #000000;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #000000;">Datenschutz</a>
+</p>
+    
+<div id="my-popup" class="my-infopopup">
+  <div id="my-popup-content" class="my-infopopup-content">
+    <h2>What's this?</h2>
+    <p>This is a map that shows where Karens have been spotted!<br><br> A "Karen" is a meme that refers to a particular type of entitled, middle-aged woman who always seems to be complaining about something. Think of her as the queen of drama and outrage. <br><br>This map is a crowdsourced project, which means anyone can report a Karen sighting and it'll get added to the map!<br><br>You can add a Karen yourself by clicking the plus icon in the top right corner!</p>
+    <img class="my-close-btn" onclick="closeMyInfo()" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAA6FJREFUeF7t3eFy00AMBGD3yYAngz4Z8GYgpmY8wTRn+U7a3a5n8qPTXCztZzlOmmleNm/SCbxId+fmNgOLHwQGNrB4AuLteYINLJ6AeHueYAOLJyDenifYwOIJiLfnCTaweALi7XmCDSyegHh7nmADiycg3p4n2MDiCYi35wk2sHgC4u15gg0snoB4e55gA4snIN6eJ9jA4gmIt9c1wZ+3bft6yPbntm0/3m4KkcP01wH87QH3CPr6+4f4PfMG1V81cBzZ35/oMSO/h7u3/aXyTFUNPBJABMGIPNpbPBUFcslWDRzTG1M8sjEhj+JG3wY+6DMgX8E18MloIyNfxS1/+qk+RY9cZJ2dvhGRM7jRm/RFVjSYDQYJmaaH6gnep5MmoJPTCVXtXcCsk0yFGyF3ArMh0+EiALMgU+KiAKMj0+IiAaMiU+OiAaMh0+MiAqMgS+CiAncjy+AiA3chS+GiA1cjy+EyAFchS+KyAK9GlsVlAl6FLI3LBjwbWR6XEXgW8ofAZQW+ixzrjx+6j59HNqQPHIzU++c+3X8uHC705I7ZKczskxKXHfjOJF9BpsVVAF6NTI2rArwKmR5XCXg2sgSuGvAsZBlcReC7yFK4Bv73WtrAV15fNNx3xmtjKWTmNzoej58ZuPtjyiCrAM/ElUJWAF6BK4PMDrwSVwKZGbgClx6ZFTiLGxdPsfnPhQ0vcUZ3eQc31t55M4Tu6pptgmfg7gfSzMcaPTjL78cEvAJkxWOWI763QxbglRArH7sdmwG4AqBiHy3Y6MCVwVfuqwwbGbgj8I59LsVGBe4MunPf07ERgRECRqhhCjYaMFKwSLWksZGAEQNFrOkSNgowcpDItT3FRgBmCJChxlPsbmCm4Jhq/YvdCcwYGF3NXcB0QR3Of1S1dwBTBfSfqxiaHqqB/S/9xf+lf+bIR/4URaYff63O4bSIjJv9ZIiB35JjwM0gG1j8q+1KD1zEi6zSAJ6+13ftDiPPyR/6e5OYcUdO1+X9VU/wHkK8XIrbp4cLqnh+Uthg+usCVkCk6MHAFEz5Ig2cz45ipYEpmPJFGjifHcVKA1Mw5Ys0cD47ipUGpmDKF2ngfHYUKw1MwZQv0sD57ChWGpiCKV+kgfPZUaw0MAVTvkgD57OjWGlgCqZ8kQbOZ0ex0sAUTPkiDZzPjmKlgSmY8kUaOJ8dxUoDUzDlizRwPjuKlQamYMoXaeB8dhQrDUzBlC/SwPnsKFb+AksE7HlIiS/cAAAAAElFTkSuQmCC" style="width: 23px; height: 23px;" alt="close">
+  </div>
+</div>
+
+
+  <script>
+    const form = document.querySelector('form');
+    const submitButton = document.getElementById('submit');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      submitButton.value = 'Sending...';
+      submitButton.disabled = true;
+
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyNHYeVQe_NeQRlJTHx4s3TVu7oT-XNrYF-5War5qeag-eGn6Asyeda-3dRlOG0dALEfg/exec";
+      const formData = new FormData(form);
+
+      fetch(scriptURL, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          alert("Sent successfuly!");
+          form.reset();
+          submitButton.value = 'Send';
+          submitButton.disabled = false;
+        })
+        .catch(error => {
+          console.error('Error!', error.message);
+          submitButton.value = 'Send';
+          submitButton.disabled = false;
+        });
+    });
+    
+    
+            
+const myOpenPopupImage = document.getElementById('my-open-popup');
+const myPopup = document.getElementById('my-popup');
+const myClosePopupButton = document.getElementById('my-close-btn');
+
+myOpenPopupImage.addEventListener('click', () => {
+  myPopup.style.display = 'block';
+});
+
+myClosePopupButton.addEventListener('click', () => {
+  myPopup.style.display = 'none';
+});
+
+function closeMyInfo() {
+  myPopup.style.display = 'none';
+}
+  </script>
+</body>
