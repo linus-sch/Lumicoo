@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+</style>
+  <title>A/B Test - Guessing Game</title>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #212121;
+    }
+    h1 {
+      color: #FFFFFF;
+    }
+    h2 {
+      color: #FFFFFF;
+    }
+    p, .alt-text {
+      color: #FFFFFF;
+    }
+    .thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .thumbnail, .video-info-container {
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      width: 300px;
+      height: 180px; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      position: relative;
+      background-color: #444;
+      overflow: hidden;
+    }
+    .thumbnail:hover {
+      transform: scale(1.005);
+    }
+    
+    .video-info-container:hover {
+      background-color: #212020 
+    }
+    
+    .thumbnail img, .video-info-container img {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      transition: opacity 0.3s ease-in-out;
+      display: none;
+    }
+    .skeleton {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #444 25%, #555 37%, #444 63%);
+      background-size: 400% 100%;
+      animation: shimmer 10s ease-in-out infinite; 
+      border-radius: 5px;
+    }
+    @keyframes shimmer {
+      0% {
+        background-position: -400% 0;
+      }
+      100% {
+        background-position: 400% 0;
+      }
+    }
+    .loaded .skeleton {
+      display: none;
+    }
+    .loaded img {
+      display: block;
+    }
+    .correct::after,
+    .wrong::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s ease-in-out;
+    }
+    .correct::after {
+      background-image: url('https://i.ibb.co/VqtcWFt/Check-Circle-Symbol.png');
+      background-size: cover;
+    }
+    .wrong::after {
+      background-image: url('https://i.ibb.co/z2MMMJy/Material-Icons-100dp.png');
+      background-size: cover;
+    }
+    .correct.show::after,
+    .wrong.show::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .thumbnail.correct img,
+    .thumbnail.wrong img {
+      opacity: 0.5;
+    }
+    #result {
+      font-size: 2em;
+      margin-top: 20px;
+      position: relative;
+      opacity: 0;
+      color: #FFFFFF;
+      transition: all 0.3s ease-in-out;
+    }
+    #result.show {
+      opacity: 1;
+    }
+  
+   button-container {
+      display: flex;
+      justify-content: center;
+   }
+
+   #viewBtn, #skipBtn, #nextBtn {
+       margin: 0 10px;
+   }
+   #viewBtn:hover, #skipBtn:hover, #nextBtn:hover {
+       transform: scale(1.1);
+   }
+   #nextBtn {
+       position: relative;
+       top: -5px;
+   }
+
+    #nextBtn,
+    #skipBtn,
+    #viewBtn {
+      display: none;
+      margin-top: 20px;
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
+      background-size: cover;
+      border: none;
+      background-color: transparent;
+      transition: transform 0.3s ease-in-out;
+    }
+    #nextBtn {
+      background-image: url('https://i.ibb.co/6nfPrvV/Refhoster-Logo-1.png');
+      height: 36px;
+      width: 36px;
+    }
+    #skipBtn {
+      background-image: url('https://i.ibb.co/wMHmDPK/Material-Symbole-100dp-wght400.png');
+    }
+    #viewBtn {
+      background-image: url('https://i.ibb.co/60h1949/Material-Icons-100dp.png');
+    }
+.scoreboard {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  padding: 5px;
+  color: #FFFFFF;
+  background-color: #464646;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+
+    .scoreboard span {
+      margin: 0 5px;
+    }
+    
+    .scoreboard:hover {
+      background-color: #333131 
+    }
+    
+#videoInfo p {
+    color: #CCCCCC;
+    font-size: 17px; 
+}
+
+
+@media screen and (max-width: 768px) {
+    #videoInfo p {
+        font-size: 20px; 
+    }
+}
+
+    
+#videoInfo h3 {
+    font-size: 20px; 
+}
+
+
+@media screen and (max-width: 768px) {
+    #videoInfo h3 {
+        font-size: 25px; 
+    }
+}
+
+    
+    #videoInfo {
+     margin-top: 20px;
+     color: #FFFFFF;
+     text-align: left;
+     background-color: #333;
+     border-radius: 5px;
+     padding: 0 10px 10px 10px;
+     display: inline-block;
+     width: calc(100% - 40px);
+     max-width: 615px;
+     height: auto;
+     vertical-align: top;
+    }
+    
+
+    .video-info-skeleton {
+      background: linear-gradient(90deg, #444 25%, #555 37%, #444 63%);
+      background-size: 400% 100%;
+      animation: shimmer 5s ease-in-out infinite; 
+      border-radius: 5px;
+      width: 100%;
+      height: 50px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 500px) {
+      .thumbnail {
+        width: calc(100% - 40px);
+        height: auto;
+      }
+      #videoInfo {
+        width: calc(100% - 40px);
+      }
+    }
+        .youtube-logo {
+      display: inline-block;
+      width: auto;
+      height: auto;
+      padding: 3px 10px;
+      background-color: #FF0000;
+      border-radius: 13px;
+      color: #FFFFFF;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="scoreboard">
+    <img src="https://i.ibb.co/VqtcWFt/Check-Circle-Symbol.png" width="15" height="15">
+    <span id="correctCount">0</span>
+    <img src="https://i.ibb.co/z2MMMJy/Material-Icons-100dp.png" width="15" height="15">
+    <span id="wrongCount">0</span>
+  </div>
+
+  <h1><span class="youtube-logo">A/B</span> Thumbnail Testing Game</h1>
+  <p>Which thumbnail version did better in the A/B test and made more views?</p>
+  <div class="thumbnails">
+    <div id="leftThumbnail" class="thumbnail" onclick="checkAnswer('leftThumbnail')">
+      <div class="skeleton"></div>
+      <img id="leftImg" src="" alt="Loading..." class="alt-text">
+    </div>
+    <div id="rightThumbnail" class="thumbnail" onclick="checkAnswer('rightThumbnail')">
+      <div class="skeleton"></div>
+      <img id="rightImg" src="" alt="Loading..." class="alt-text">
+    </div>
+  </div>
+
+  <div id="result"></div>
+  
+ 
+ <div id="videoInfo" class="video-info-container">
+    <div class="video-info-skeleton"></div>
+    <div class="video-info-skeleton"></div>
+  </div>
+  <br>
+<div class="button-container">
+  <button id="viewBtn" onclick="viewVideo()"></button>
+  <button id="skipBtn" onclick="skipRound()"></button>
+  <button id="nextBtn" onclick="startRound()"></button>
+</div>
+<p></p><br>
+<p style="position: absolute; left: 50%; transform: translateX(-50%); text-align: center; font-size: 0.8em;">
+  <a href="https://www.lumicoo.net/contact" style="text-decoration: none; color: #ffffff;">Contact</a> | 
+  <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #ffffff;">Datenschutz</a> | 
+<a href="#" id="resetGame" onclick="resetGame()" style="text-decoration: none; color: #ffffff;">Reset</a>  | <a href="https://www.lumicoo.net/ab-thumbnail-testing-game/about-ab-thumbnail-testing-game
+" style="text-decoration: none; color: #ffffff;">Help</a> 
+
+</p>
+
+<p></p><br>
+
+</body>
+<script>
+    var round = 0; // Initialisiere die Runde auf 0
+    var totalRounds = 10;
+    var data = [];
+    var correctCount = 0;
+    var wrongCount = 0;
+    var skipCount = 0;
+    var maxSkips = 9999;
+
+    function loadScoreFromLocalStorage() {
+      var storedCorrectCount = localStorage.getItem('correctCount');
+      var storedWrongCount = localStorage.getItem('wrongCount');
+
+      if (storedCorrectCount !== null) {
+        correctCount = parseInt(storedCorrectCount);
+      }
+
+      if (storedWrongCount !== null) {
+        wrongCount = parseInt(storedWrongCount);
+      }
+
+      updateScoreboard();
+    }
+
+    function saveScoreToLocalStorage() {
+      localStorage.setItem('correctCount', correctCount.toString());
+      localStorage.setItem('wrongCount', wrongCount.toString());
+    }
+
+    function fetchData() {
+      var storedRoundIds = loadRoundIdsFromLocalStorage();
+      var idsParam = storedRoundIds.length > 0 ? `?exclude=${storedRoundIds.join(',')}` : '';
+
+      fetch(`https://script.google.com/macros/s/AKfycbwEVzjI3Z67OvPfmPodLpfI1_F2T5_5xSWfvTjCa5UTZjBRx1GyYyCqCLSV3bxCoOi9vA/exec${idsParam}`)
+        .then(response => response.json())
+        .then(jsonData => {
+          data = jsonData;
+          round = 0; // Setze die Runde zurück, wenn neue Daten geladen werden
+          startRound();
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+
+    function startRound() {
+      if (round >= totalRounds) { // Wenn alle Runden gespielt sind, neue Daten laden
+        fetchData();
+        return;
+      }
+
+      var roundData = data[round];
+      if (!roundData) {
+        round++;
+        startRound();
+        return;
+      }
+
+      var leftThumbnail = document.getElementById('leftThumbnail');
+      var rightThumbnail = document.getElementById('rightThumbnail');
+      var leftImg = document.getElementById('leftImg');
+      var rightImg = document.getElementById('rightImg');
+
+      leftThumbnail.classList.remove('loaded', 'correct', 'wrong', 'show');
+      rightThumbnail.classList.remove('loaded', 'correct', 'wrong', 'show');
+
+      leftImg.src = '';
+      rightImg.src = '';
+
+      var leftImgLoaded = false;
+      var rightImgLoaded = false;
+
+      leftImg.onload = function() {
+        leftThumbnail.classList.add('loaded');
+        leftImgLoaded = true;
+        if (leftImgLoaded && rightImgLoaded) {
+          hideSkeleton();
+        }
+      };
+
+      rightImg.onload = function() {
+        rightThumbnail.classList.add('loaded');
+        rightImgLoaded = true;
+        if (leftImgLoaded && rightImgLoaded) {
+          hideSkeleton();
+        }
+      };
+
+      if (Math.random() < 0.5) {
+        leftImg.src = roundData.LThumbnail;
+        rightImg.src = roundData.WThumbnail;
+      } else {
+        leftImg.src = roundData.WThumbnail;
+        rightImg.src = roundData.LThumbnail;
+      }
+
+      showSkeleton();
+
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('result').classList.remove('show');
+      document.getElementById('nextBtn').style.display = 'none';
+      document.getElementById('skipBtn').style.display = 'inline-block';
+      document.getElementById('viewBtn').style.display = 'inline-block';
+
+      updateVideoInfo(roundData.Videotitle, roundData.Channel);
+
+      round++; // Erhöhe die Runde erst nach dem Setzen der Daten
+    }
+
+    function showSkeleton() {
+      document.querySelectorAll('.video-info-skeleton').forEach(el => el.style.display = 'block');
+    }
+
+    function hideSkeleton() {
+      document.querySelectorAll('.video-info-skeleton').forEach(el => el.style.display = 'none');
+    }
+
+    function checkAnswer(selectedThumbnailId) {
+      var leftElement = document.getElementById('leftThumbnail');
+      var rightElement = document.getElementById('rightThumbnail');
+      var resultElement = document.getElementById('result');
+
+      var correctThumbnailId = (leftElement.querySelector('img').src === data[round - 1].WThumbnail) ? 'leftThumbnail' : 'rightThumbnail';
+
+      if (selectedThumbnailId === correctThumbnailId) {
+        document.getElementById(selectedThumbnailId).classList.add('correct');
+        document.getElementById(selectedThumbnailId === 'leftThumbnail' ? 'rightThumbnail' : 'leftThumbnail').classList.add('wrong');
+        resultElement.innerHTML = 'Correct!';
+        correctCount++;
+      } else {
+        document.getElementById(selectedThumbnailId).classList.add('wrong');
+        document.getElementById(selectedThumbnailId === 'leftThumbnail' ? 'rightThumbnail' : 'leftThumbnail').classList.add('correct');
+        resultElement.innerHTML = 'Wrong!';
+        wrongCount++;
+      }
+
+      setTimeout(function() {
+        document.querySelectorAll('.correct, .wrong').forEach(el => el.classList.add('show'));
+        resultElement.classList.add('show');
+        document.getElementById('nextBtn').style.display = 'inline-block';
+        document.getElementById('skipBtn').style.display = 'none';
+        document.getElementById('viewBtn').style.display = 'inline-block';
+        updateScoreboard();
+        saveScoreToLocalStorage();
+        saveRoundIdToLocalStorage(data[round - 1].ID);
+      }, 500);
+    }
+
+    function skipRound() {
+      skipCount++;
+      if (skipCount >= maxSkips) {
+        skipCount = 0;
+        round = totalRounds + 1;
+        document.getElementById('skipBtn').style.opacity = '0.5'; 
+      }
+      startRound();
+    }
+
+    function resetThumbnails() {
+      document.getElementById('leftThumbnail').classList.remove('correct', 'wrong', 'show');
+      document.getElementById('rightThumbnail').classList.remove('correct', 'wrong', 'show');
+    }
+
+    function updateScoreboard() {
+      document.getElementById('correctCount').innerText = correctCount;
+      document.getElementById('wrongCount').innerText = wrongCount;
+    }
+
+    function saveRoundIdToLocalStorage(roundId) {
+      var storedRoundIds = loadRoundIdsFromLocalStorage();
+      storedRoundIds.push(roundId);
+      localStorage.setItem('roundIds', JSON.stringify(storedRoundIds));
+    }
+
+    function loadRoundIdsFromLocalStorage() {
+      var storedRoundIds = localStorage.getItem('roundIds');
+
+      if (storedRoundIds !== null) {
+        return JSON.parse(storedRoundIds);
+      } else {
+        return [];
+      }
+    }
+
+    function updateVideoInfo(title, channel) {
+      var videoInfo = document.getElementById('videoInfo');
+      videoInfo.innerHTML = '<h3>' + title + '</h3> <p> @' + channel + '</p>';
+      hideSkeleton();
+    }
+
+    function viewVideo() {
+      var roundData = data[round - 1];
+      window.open(roundData.Videolink, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadScoreFromLocalStorage();
+      fetchData();
+    });
+      function resetGame() {
+    // Lösche alles aus dem Local Storage
+    localStorage.clear();
+
+    // Setze Spielstand-Variablen zurück
+    correctCount = 0;
+    wrongCount = 0;
+    skipCount = 0;
+
+    // Aktualisiere die Anzeigewerte auf null
+    updateScoreboard();
+
+    // Starte das Spiel neu
+    fetchData();
+  }
+  </script>
+
+</html>
