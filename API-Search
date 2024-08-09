@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Search</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #343438;
+      color: #ffffff;
+      font-family: Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    ::selection {
+      background: #2081D6;
+      color: #ffffff; 
+        }
+    a {
+      color: #fff60c; 
+      text-decoration: none;
+    }
+    
+    .Title {
+      align-items: center;
+    }
+    
+    h1, h2, h3 {
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], button, select {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 96%;
+    }
+
+    button, select {
+      background-color: #EEEEEE;
+      color: #222222;
+      cursor: pointer;
+    }
+
+.input-with-button {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  max-width: 500px; /* set a maximum width of 400px */
+  margin: 0 auto; /* center the container horizontally */
+}
+
+.input-with-button input[type="text"] {
+  flex: 1;
+  min-width: 200px; 
+  max-width: calc(100% - 100px); 
+  background-color: #282828;
+  padding: 10px;
+  color: #EEEEEE;
+  border-radius: 5px;
+  border: 2px solid white;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.input-with-button button {
+  height: 43px; 
+  width: 50px; 
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+
+#filters {
+  display: flex;
+  justify-content: center; 
+  max-width: 500px; 
+  margin: 0 auto;
+  margin-bottom: 20px;
+  animation: slideInUp 0.5s ease-out;
+  border: none;
+
+}
+
+    #filters select {
+      flex: 1;
+      background-color: #343438;
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 5px;
+      font-size: 16px;
+      margin: 0; 
+    }
+
+
+    .section2 {
+      margin-bottom: 40px;
+    }
+
+    .api-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .api-item, .category-item {
+      background-color: #282828;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .category-item {
+      background-color: transparent;
+    }
+    
+    .api-item h3 {
+      margin: 0 0 5px 0;
+      font-size: 23px;
+    }
+
+    .api-item p {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .api-item a {
+      color: #1e88e5;
+      text-decoration: none;
+    }
+
+    .api-item a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 350px) {
+
+      .api-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    button {
+       transition: background-color 0.3s ease;
+    }
+
+    button.searching {
+      background-color: #757575; 
+      color: white
+    }
+
+    mark {
+      background-color: #2081D6;
+      color: white;
+      border-radius: 3px;
+    }
+    .favicon-circle {
+      background-color: #ffffff;
+      border-radius: 50%;
+      display: inline-block;
+      height: 25px;
+      width: 25px;
+      text-align: center;
+      line-height: 25px;
+      margin-right: 5px;
+    }
+    .material-symbols-outlined {
+      text-align: center;
+      font-variation-settings:
+       'FILL' 0,
+       'wght' 500,
+       'GRAD' 0,
+       'opsz' 100,
+    }
+    .disclaimer {
+       text-align: left;
+       background-color: #ffb5a8;
+       padding: 20px; 
+       border: 1px solid #000; 
+       border-radius: 5px;
+       width: 80%; 
+       margin: 20px auto;
+       color: #37444D;
+       max-width: 400px
+    }
+
+
+
+   .disclaimer p {
+       margin-bottom: 10px; /* add some space between paragraphs */
+   }
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.category-header h2 {
+  margin: 0;
+}
+
+.category-content {
+  display: none;
+  margin-top: 10px;
+}
+
+.toggle-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  transition: transform 0.3s;
+}
+
+.category-item.open .category-content {
+  display: block;
+}
+
+.category-item.open .toggle-icon {
+  transform: rotate(180deg);
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-family: 'Bungee', sans-serif; text-align: center; font-size: 40px;"> <span style="color: #2081D6;">API</span> Search</h1>
+
+    <p style="text-align: center; color: #EEEEEE ">The search engine for APIs</p>
+
+    <div class="input-with-button">
+      <input type="text" id="searchInput" placeholder="Search for APIs...">
+      <button onclick="handleSearch()">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAAAAXNSR0IArs4c6QAAAA9QTFRFR3BMAAAAAAAAAAAAAAAA06wI/wAAAAR0Uk5TAECAv6NU3QwAAAGASURBVHja7dpha8MwDIRh3Z3+/28eFDzKMpCdXmzG9H5u+0Qi0MY0uq7ruq5bDqSkzJRIchMK5c822EO9JO5nR9zF7tq4so7bxx0JbjdHe4dmzkeva5AdrgQgIgCykI2ugOLCEI4wcd/yCVnXNZa03IsWJhcjszu/GjhhLrxWRldRJd/I+VbUyTUyF0fA8sj1BFy9Upk2vX6psGyaMRfccMwmx66LgauRTQMbdu2B613zc5h/Acbnd5dyhH8C53c339Zw31xemHOw/yOYI+6Fs4ANXzQVHLe7A9MBK0cyb9q/a7phLQ+crt/VxoH9TwaYG9j/MOQ7CMHtp0XnQQR9z9J1uHciIPfZCyYPO3Hu1Md/fsqZs1365eunYrB2mXmJBF4mNNTH5WstW2UoZ9KM7B9aCD4hc2K1pewfWojwyyMqf48vtpDdG5eGWsgGm5RepIihlrK/lltuueWWW275poxTsuKQrDgkKw7JjEMy4ozM2B4oCf3v0q7ruq7r3vsCjkEhlXPF7eEAAAAASUVORK5CYII=" alt="Image placeholder" width="24" height="24">
+</button>
+    </div>
+
+    <div id="filters" class="hidden">
+      <select id="authFilter" onchange="handleSearch()">
+        <option value="">Auth</option>
+        <option value="No">No</option>
+        <option value="apiKey">apiKey</option>
+        <option value="OAuth">OAuth</option>
+      </select>
+      <select id="httpsFilter" onchange="handleSearch()">
+        <option value="">HTTPS</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+      <select id="corsFilter" onchange="handleSearch()">
+        <option value="">CORS</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+    </div>
+    
+    <div id="results"></div>
+    
+<p></p><br>
+<p></p><br>
+    <div class="section2">
+      <div id="featured">
+        <h3>Featured</h3>
+        <hr>
+        <div class="api-grid" id="featuredGrid"></div>
+      </div>
+    </div>
+
+    <div class="section2">
+      <div id="popular">
+        <h3>Popular</h3>
+        <hr>
+        <div class="api-grid" id="popularGrid"></div>
+      </div>
+    </div>
+
+<div class="section2">
+  <div id="categories">
+    <h3>Categories</h3>
+    <hr>
+    <div id="categoriesGrid"></div>
+  </div>
+</div>
+
+  </div>
+<div class="disclaimer">
+<span class="material-symbols-outlined">
+report
+</span>
+  <p><strong>Disclaimer:</strong> The information provided on this website is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.</p>
+  <p>Through this website, you are able to link to other websites which are not under the control of Lumicoo. We have no control over the nature, content, and availability of those sites.</p>
+</div>
+	</div>
+<p style="text-align: center;">
+  <a href="https://www.lumicoo.net/contact" style="text-decoration: none; color: #ffffff;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #ffffff;">Datenschutz</a>
+</p>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategories();
+      loadFeatured();
+      loadPopular();
+    });
+    
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.trim();
+      const auth = document.getElementById('authFilter').value;
+      const https = document.getElementById('httpsFilter').value;
+      const cors = document.getElementById('corsFilter').value;
+
+      const searchButton = document.querySelector('button');
+      searchButton.classList.add('searching'); // Klasse hinzufügen, um den Ladezustand anzuzeigen
+
+      if (query) {
+        document.getElementById('filters').classList.remove('hidden');
+        searchAPIs(query, auth, https, cors)
+          .finally(() => searchButton.classList.remove('searching')); // Ladezustand nach Abschluss der Suche entfernen
+      } else {
+        document.getElementById('filters').classList.add('hidden');
+        searchButton.classList.remove('searching'); // Bei Leerfeld auch den Ladezustand entfernen
+      }
+    }
+
+    function searchAPIs(query, auth, https, cors) {
+      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?query=${encodeURIComponent(query)}&auth=${auth}&https=${https}&cors=${cors}`;
+      
+      return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          displayResults(data, query);
+        });
+    }
+
+    function displayResults(data, query) {
+      const featuredSection = document.getElementById('featured');
+      const popularSection = document.getElementById('popular');
+      const categoriesSection = document.getElementById('categories');
+
+      // Alle Sektionen ausblenden, außer den Suchergebnissen
+      featuredSection.style.display = 'none';
+      popularSection.style.display = 'none';
+      categoriesSection.style.display = 'none';
+
+      const featuredGrid = document.getElementById('featuredGrid');
+      const popularGrid = document.getElementById('popularGrid');
+      const categoriesGrid = document.getElementById('categoriesGrid');
+
+      featuredGrid.innerHTML = '';
+      popularGrid.innerHTML = '';
+      categoriesGrid.innerHTML = '';
+
+      data.forEach(api => {
+        const apiItem = createAPIItem(api, query);
+
+        // Je nach Kategorie in das entsprechende Grid einfügen
+        if (api.Category === 'Featured') {
+          featuredGrid.appendChild(apiItem);
+          featuredSection.style.display = 'block'; // Nur die Feature-Sektion anzeigen
+        } else if (api.Category === 'Popular') {
+          popularGrid.appendChild(apiItem);
+          popularSection.style.display = 'block'; // Nur die Popular-Sektion anzeigen
+        } else {
+          // Neuen Kategorienabschnitt erstellen, wenn noch nicht vorhanden
+          let categorySection = document.getElementById(api.Category);
+          if (!categorySection) {
+            categorySection = document.createElement('div');
+            categorySection.id = api.Category;
+            categorySection.className = 'category-item';
+            categorySection.innerHTML = `<h2>${api.Category}</h2><div class="api-grid"></div>`;
+            categoriesGrid.appendChild(categorySection);
+          }
+
+          // API-Element zum Kategorienabschnitt hinzufügen
+          categorySection.querySelector('.api-grid').appendChild(apiItem);
+          categoriesSection.style.display = 'block'; // Nur die Kategorien-Sektion anzeigen
+        }
+      });
+    }
+
+function loadCategories() {
+  const categories = ["AI", "Security", "Data Validation", "Dictionaries", "Geocoding", "Open Source Projects", "Text Analysis", "Cloud Storage & File Sharing", "Anti-Malware", "Art & Design", "Books", "Development", "Phone", "Authentication & Authorization", "Business", "Calendar", "Cryptocurrency", "Currency Exchange", "Documents & Productivity", "Education", "Environment", "Events", "Finance", "Food & Drink", "Fraud Prevention", "Games & Comics", "Government", "Health", "Jobs", "Music", "News", "Open Data",  "Personality", "Photography", "Science & Math", "Shopping", "Social", "Test Data", "Tracking", "Transportation", "URL Shortener", "Vehicle", "Video"];
+
+  const categoriesContainer = document.getElementById('categoriesGrid');
+  categoriesContainer.innerHTML = '';
+
+  categories.forEach(category => {
+    const section = document.createElement('div');
+    section.className = 'category-item';
+    section.innerHTML = `
+      <div class="category-header" onclick="toggleCategory(this)">
+        <h2>${category}</h2>
+        <span class="toggle-icon">expand_more</span>
+      </div>
+      <div class="category-content">
+        <div class="api-grid" id="${category}"></div>
+      </div>
+    `;
+    categoriesContainer.appendChild(section);
+    fetchCategoryApis(category, 8);
+  });
+}
+
+function toggleCategory(header) {
+  const categoryItem = header.parentElement;
+  categoryItem.classList.toggle('open');
+}
+
+    function loadFeatured() {
+      fetchFeaturedData().then(data => {
+        const featuredContainer = document.getElementById('featuredGrid');
+        data.forEach(api => {
+          const apiItem = createAPIItem(api, '');
+          featuredContainer.appendChild(apiItem);
+        });
+      });
+    }
+
+    function loadPopular() {
+      fetchPopularData().then(data => {
+        const popularContainer = document.getElementById('popularGrid');
+        data.forEach(api => {
+          const apiItem = createAPIItem(api, '');
+          popularContainer.appendChild(apiItem);
+        });
+      });
+    }
+
+    async function fetchFeaturedData() {
+      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Featured`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+
+    async function fetchPopularData() {
+      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Popular`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    }
+
+    function createAPIItem(api, query) {
+      const apiItem = document.createElement('div');
+      apiItem.className = 'api-item';
+      apiItem.innerHTML = `
+        <h3>${api.Name}</h3>
+        <p>${highlightQuery(api.Description, query)}</p><br>
+        <p><strong>Auth:</strong> ${api.Auth}</p>
+        <p><strong>HTTPS:</strong> ${api.HTTPS}</p>
+        <p><strong>CORS:</strong> ${api.CORS}</p>
+        <a  href="${api.URL}" target="_blank">Visit API</a>
+      `;
+
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${api.URL}&sz=64`;
+      const faviconImg = document.createElement('img');
+      faviconImg.setAttribute('src', faviconUrl);
+      faviconImg.setAttribute('alt', 'Favicon');
+      faviconImg.style.width = '16px';
+      faviconImg.style.height = '16px';
+      faviconImg.style.marginRight = '5px';
+      apiItem.querySelector('h3').prepend(faviconImg);
+
+      return apiItem;
+    }
+function fetchCategoryApis(category, limit) {
+  const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=${encodeURIComponent(category)}`;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      const categoryGrid = document.getElementById(category);
+      categoryGrid.innerHTML = ''; // Clear previous content
+
+      data.forEach(api => {
+        const apiItem = createAPIItem(api, '');
+        categoryGrid.appendChild(apiItem);
+      });
+    });
+}
+    function highlightQuery(text, query) {
+      if (!query) return text; 
+      const regex = new RegExp(query, 'gi'); // Erstellt eine globale, case-insensitive Regex für den Suchbegriff
+      return text.replace(regex, match => `<mark>${match}</mark>`); // Markiert den Suchbegriff im Text
+    }
+  </script>
