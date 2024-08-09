@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Karen</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: white;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        #form-container button {
+            padding: 10px 20px;
+            background-color: #FF5756;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            right: 5px
+        }
+
+        #form-container button:hover {
+            background-color: #d63535;
+        }
+        #form-container {
+            padding: 20px;
+            width: 80vw;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        #form-container input, #form-container textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #header {
+            width: 100%;
+            height: 110px;
+            background: #F5F5F7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #header h1 {
+            margin: 0;
+            font-size: 21px;
+            color: #000000;
+        }
+        #header .plus-btn {
+            font-size: 26px;
+            cursor: pointer;
+            color: #000000;
+        }
+        #header .icon-btns {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        #header .icon-btns img[alt="Whats this?"] {
+            color: #000000;
+            width: 23px;
+            height: 23px;
+        }
+        #header .icon-btns .custom-icon {
+            width: 26px;
+            height: 26px;
+            margin-right: 8px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .icon-btns .plus-btn {
+            width: 27px;
+            height: 27px;
+            cursor: pointer;
+            margin-right: 35px;
+        }
+        #header .logo {
+            width: 33px;
+            height: 33px;
+            margin-right: 5px;
+        }   
+        ::selection {
+            background: #ff9999; 
+            color: #000000; 
+            border-radius: 5px;
+        }
+.my-infopopup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  min-width: 300px;
+  max-width: 400px;
+  transform: translateX(-50%);
+  z-index: 9999; 
+  background-color: transparent;
+  display: none;
+}
+
+.my-infopopup-content {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.my-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div id="header">
+    <img src="https://i.ibb.co/H2kR3TL/IMG-3641.png" alt="Logo" class="logo">
+        <a href="https://www.lumicoo.net/karenradar/map" style="position: relative; text-decoration: none; top: 2px; color: black !important;">
+        <h1>Karen Radar</h1>
+        </a>
+        <div class="icon-btns">
+
+            <a href="https://www.lumicoo.net/karenradar/map" style="position: relative; top: 2px; color: black !important;">
+
+            <img class="custom-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAAAXNSR0IArs4c6QAAA6VJREFUeF7tnQtu3DAMRJ2TNT1Z2pMlPVkbblYBYfgzI5GmXIyBIAjAlah54sfeXeVl0VWqwEvp7Jp8EYDiTSAAAlCsQPH0igABKFageHpFgAAUK1A8vSJAAIoVKJ5eESAADwVenzq03/bnr2JtLpm+MgKa2G8OwHrRH8uy/JkQhvnu/f79uQbz1X6o62oAiOh7C7BFVkbGWvQtP3+yEK4AMCL6DDAQ4ZufFgEGAb4yATCOww5vGGZExojvlKaUMaDSiOPA8Kcm3bn4WYfM/x8HNenUgWXhHvFHAKgW/ShNIYUx2n9KU8p4tVJrE60TmP3a6qSiRfcaUJpSxm6W98EwrYLW2kR/vxHtC6UpZezawDvs/Ghh0fEoTSnjpwd/UU8O7GwntoJ5Np752O6K7wCe0pQyHgTgRfdsEADevgIGu2HgPZoNYE/0EQBrGKNt455YrV60SG127IY5hJEBABE9CkAGjDP/pwfAQg1dkLuhYurFmegZG+YxJiuWvSZasOjxvFjWblrLfHSxD9BC/f3fAUy/YQSAzwKKALjH+zIMFSx6PEWAIiB8h64DRBFwkjKiBRKA4hwtAAKAK6AirCKsIozHyw366o3FRBf50PGUgpSClIKUgjgFlII4vcIjTAAE4FgBtrCH7ih1QcVdhQAIAJUBKOPn7opOGdHj6WFccZEUAAHAFVAKKq5ZAiAA4XeqqgF4Bkz52IgACACugGqAaoBqAB4veksy/KOOSkFKQUpBSkGcAqEPD5WClIKUgrgAnPwLD3pHrDikBUAAqLpKGestyfiHhwJQHLHVADK+SK3H0UBb1XNiVe95cKE3Tnf+mmqP6Fss2cNcowCg/lNZhTLuKMLNaXtpxjFhCIwRAKjofqNQmlLGBIAex4HMdWiyd34oC2DUd0pTyhgEMCpkxOs9DATAqOhTRUCEgHcdw8BTp77PFgFXHCuZBZc+N9ocmQXA1olVtpOyzoOLhkDv/OZAJQD0mDDLz76bihavdzzU/8PxrwbQ2kbkTOctx6thhIjeXbEHuqBwx12xYw7n69ntGb5/+9ETAei50amOr5SMPsy1+W7T0P+WhKHcA+DsAdqVwm+ttRfGZaKPpqD2WMEXxmrR9zbdWSdVInoEACbKZrH1N0gtraSmF2ThPSkIGVc2oAICAAqVZSYAWcqC4woAKFSWmQBkKQuOKwCgUFlmApClLDiuAIBCZZkJQJay4LgCAAqVZSYAWcqC4woAKFSW2T/DuTpwUCMcxwAAAABJRU5ErkJggg==" alt="">
+
+            </a>
+
+          
+                <img id="my-open-popup" class="custom-icon question-mark-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAABJhJREFUeF7tnQly2zAMRZ2TtT1Zm5M1PVlbTIQZWpEtkIBM4PN7JpPFlAz+RyxcYr/d+IBW4A26d+zcjYDBBwEBEzC4AuDdowcTMLgC4N2jBxMwuALg3aMHEzC4AuDdowcTMLgC4N2jBxMwuALg3UP14O+3202+9PFt+6H920fz/J//7fX39u/l8SMB/rXR+OmkooDfG+jOW867HAGwgPVCfUZAgJeFXRnw1WD30EuCrgj41WD3oMWbNR3Mi73GV64GeDZclVW8+YdR46nNqgCW6vf3VKWOX1wgp666KwDO4rWPxlfqkJ0dcFbP3cNO68mZAVeBq7BTapnSqE0xybntylPCFHxnUsrCKyvganCVdLp8nBFw9qLqLJKk0jSVMVtIvmI6pFMZ2VTQjQcBdUUKSOXF2QBHhmYRWh5nq0668xS5np2mqkYE7PGgqAHmseEsBXQ9jwY4QljxaPFmb/hOoW0KI5oh6fGg6LDosUW6lELbFEY0gEcr6AjPPQp9f7vi4X3jq2zqMikb4JHVqyuFHB1wAiHFwkc2wFr1WivaK+Gqp4x6MQE/iTUWz3kF3N4Bt+/SdAeabsBJQhHQ7YlI69y2K08ZbLBGFAKOVP5F9xqpC9S06Q403YAXQfK+zGgejp66dfeDgG2SEbBNp5KtGKJLYrMbTcB2rUq2tEzZjjrGeXAR3KNr0gRcALAnPBNwAcCj3itdmz5FEiM4TXo8ykZzb5qNBgJ+DNcTmtN4LwEfA/bCTaUrQ/RXyJ68K3d71S6XqYQh4HuZvHBTeW86Y0xD8rpGEXBTVM6tRPTgz9OTEYftU4Vmhbw64Ci4KRY1joLbyoDh4a6cg6Pgpprz0oM/FVgG7ooevBTc1QAvB3c1wKPnqvapLd1c99nSwCpVdMQiRrplSMuazwqAPdt+rYYpFzLOIKMDjsq7JeGukIMjQnNZuCsA9hZWpeGiA/aG5/Jw0QF7wnPazYOzomr/PGqR5fXeUnPdFefBHsAw3oscoj1zXxjvJeDj2EbAvYl+QvvRAgsqPCN7MAFvXoVaRY/mYKjwjOzBo4DhBjxch5p83xum4bwX2YOVs3UtGmJZcsVDd5a3BoaFu4IH66BW0HqqUqZD8vb+Z+8GP2GGF/uSyDk4VqmidyPgouCsZhOwVami7Qi4KDir2QRsVapoOwIuCs5qNgFblSrajoCLgrOaTcBWpYq2I+Ci4KxmrwBYlyPlwz304+p0qVK+6yeTWjUr1Q4ZsGWjQWAJYNlwgASNCnhkwx9yVwkR8AhcDbtwkNEAew68K2Sokx1ogHuP6RwVTFBHZ5EAR3gvXKhGAuzJvXtPhsnFSIAjwrOChgnTSICtJyitCxUQ2kB0YiNGwAdDFwkwQzQ4YBZZBGxNvzk+1Mps7ZOGSCFauhkRpmEqaBEEDXDEYgeXKiNCx4X38ORimAUO1RfNg7VfI5Dh4CKG6DYwcMMfMAcfRX4BLV9HR3akPfR/GKKG6AtTfK1bE3AtXt3WEnC3ZLUuIOBavLqtJeBuyWpdQMC1eHVbS8DdktW6gIBr8eq2loC7Jat1AQHX4tVt7T/hZrt5xRt0gAAAAABJRU5ErkJggg==" alt="Whats this?">
+            <a href="https://www.lumicoo.net/karenradar/report-karen" style="position: relative; top: 2px;">
+
+                <img class="plus-btn" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAAytJREFUeF7tnWFO40AMRpv2YMBlGvUUwCmq9DLAwdqsBqmr3UUID8TO128fvweP7TdvmgrcDht+rDswWFdHcRsAmx8CAAPYvAPm5WEwgM07YF4eBgPYvAPm5WEwgM07YF4eBgPYvAPm5WEwgM07YF4eBgPYvAPm5WEwgM07YF4eBgPYvAPm5WEwgM07YF4eBgPYvAPm5f0XBh+Px/vdbvc4z/N94zkMw+s8z2/jOD6Z8/X/v+hpmhrEx09APrtDtjb4C7jvzC+Xy8PhcHh1Ndka8Ol0erley58BbNf1fr9/APANdmCapjmS9jiOtgfdtrAGFsAb74csAAP4/Qbnio68kAmuwWAMxmBBMcMpYTAGY3BYF8GFGIzBGCwoZjglDMZgDA7rIrgQgzEYgwXFDKeEwRiMwWFdBBdiMAZjsKCY4ZQwGIMxOKyL4EIMxmAMFhQznBIGYzAGh3URXIjBGIzBS4r575TfkrFvIdYaU41lkw2RQbBbgLRQjmVTjSWAgfvxWFRNNZYAjkz5LWTGzYSpmmosARx9mr0ZOgslWjEyA+CFYH0njA1gruiP+K2u6Pb2aLvdvnznlBv/TsmTdMkV3SDxJP3XUS2B23YsA3yFPAzD3Vefm+FqbbuWz+fzc+WHvpQCrgYXfXqveNiprv26H4CZ8F/r7P18Xwwufg3+ObK+CAAGMH8u7HNGazUGYzAGaznZlw0GYzAG9zmjtRqDMRiDtZzsywaDMRiD+5zRWo3BGIzBWk72ZYPBGIzBfc5orcZgDMZgLSf7ssFgDMbgPme0VmMwBmOwlpN92WAwBmNwnzNaqzHY3ODIVGPVlN9aR996siE41Vg2CLYGZGvAraF8xfsax6p4zwb5z6nGNab8ikv+vZ29wWs1VmVfAKuQSMoDwEmNVQkLYBUSSXkAOKmxKmEBrEIiKQ8AJzVWJSyAVUgk5QHgpMaqhAWwComkPACc1FiVsABWIZGUB4CTGqsSFsAqJJLyAHBSY1XCAliFRFIeAE5qrEpYAKuQSMoDwEmNVQkLYBUSSXkAOKmxKmEBrEIiKQ8AJzVWJSyAVUgk5QHgpMaqhP0FROxWiMBJvnUAAAAASUVORK5CYII=" alt="add">
+        </div>
+    </div>
+
+    <div id="map"></div>
+    <div id="form-container">
+        <h2>Report a Karen</h2>
+        <form id="karen-form">
+            <label for="title">Title (optional)</label>
+            <input type="text" id="title" name="title">
+
+            <label for="subtitle">Description (optional)</label>
+            <input type="text" id="subtitle" name="subtitle">
+
+            <label for="image">Video/Image URL</label>
+            <input type="text" id="image" name="image" required>
+
+            <label for="coords">Location</label>
+            <input type="text" id="coords" name="coords" placeholder="Select location on map" readonly required>
+
+            <label for="date">Date and Time</label>
+            <input type="datetime-local" id="date" name="date" required>
+    <br><p></p><hr>
+
+            <button type="submit">Report Karen</button>
+        </form>
+    </div>
+<p></p><br>
+<p style="text-align: center; color: #000000;">
+  <a href="https://www.lumicoo.net/karenradar/contact" style="text-decoration: none; color: #000000;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #000000;" #000;">Datenschutz</a>
+</p>
+    
+<div id="my-popup" class="my-infopopup">
+  <div id="my-popup-content" class="my-infopopup-content">
+    <h2>What's this?</h2>
+    <p>This is a map that shows where Karens have been spotted!<br><br> A "Karen" is a meme that refers to a particular type of entitled, middle-aged woman who always seems to be complaining about something. Think of her as the queen of drama and outrage. <br><br>This map is a crowdsourced project, which means anyone can report a Karen sighting and it'll get added to the map!<br><br>You can add a Karen yourself by clicking the plus icon in the top right corner!</p>
+    <img class="my-close-btn" onclick="closeMyInfo()" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAAAXNSR0IArs4c6QAAA6FJREFUeF7t3eFy00AMBGD3yYAngz4Z8GYgpmY8wTRn+U7a3a5n8qPTXCztZzlOmmleNm/SCbxId+fmNgOLHwQGNrB4AuLteYINLJ6AeHueYAOLJyDenifYwOIJiLfnCTaweALi7XmCDSyegHh7nmADiycg3p4n2MDiCYi35wk2sHgC4u15gg0snoB4e55gA4snIN6eJ9jA4gmIt9c1wZ+3bft6yPbntm0/3m4KkcP01wH87QH3CPr6+4f4PfMG1V81cBzZ35/oMSO/h7u3/aXyTFUNPBJABMGIPNpbPBUFcslWDRzTG1M8sjEhj+JG3wY+6DMgX8E18MloIyNfxS1/+qk+RY9cZJ2dvhGRM7jRm/RFVjSYDQYJmaaH6gnep5MmoJPTCVXtXcCsk0yFGyF3ArMh0+EiALMgU+KiAKMj0+IiAaMiU+OiAaMh0+MiAqMgS+CiAncjy+AiA3chS+GiA1cjy+EyAFchS+KyAK9GlsVlAl6FLI3LBjwbWR6XEXgW8ofAZQW+ixzrjx+6j59HNqQPHIzU++c+3X8uHC705I7ZKczskxKXHfjOJF9BpsVVAF6NTI2rArwKmR5XCXg2sgSuGvAsZBlcReC7yFK4Bv73WtrAV15fNNx3xmtjKWTmNzoej58ZuPtjyiCrAM/ElUJWAF6BK4PMDrwSVwKZGbgClx6ZFTiLGxdPsfnPhQ0vcUZ3eQc31t55M4Tu6pptgmfg7gfSzMcaPTjL78cEvAJkxWOWI763QxbglRArH7sdmwG4AqBiHy3Y6MCVwVfuqwwbGbgj8I59LsVGBe4MunPf07ERgRECRqhhCjYaMFKwSLWksZGAEQNFrOkSNgowcpDItT3FRgBmCJChxlPsbmCm4Jhq/YvdCcwYGF3NXcB0QR3Of1S1dwBTBfSfqxiaHqqB/S/9xf+lf+bIR/4URaYff63O4bSIjJv9ZIiB35JjwM0gG1j8q+1KD1zEi6zSAJ6+13ftDiPPyR/6e5OYcUdO1+X9VU/wHkK8XIrbp4cLqnh+Uthg+usCVkCk6MHAFEz5Ig2cz45ipYEpmPJFGjifHcVKA1Mw5Ys0cD47ipUGpmDKF2ngfHYUKw1MwZQv0sD57ChWGpiCKV+kgfPZUaw0MAVTvkgD57OjWGlgCqZ8kQbOZ0ex0sAUTPkiDZzPjmKlgSmY8kUaOJ8dxUoDUzDlizRwPjuKlQamYMoXaeB8dhQrDUzBlC/SwPnsKFb+AksE7HlIiS/cAAAAAElFTkSuQmCC" style="width: 23px; height: 23px;" alt="close">
+  </div>
+</div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var customIcon = L.icon({
+            iconUrl: 'data:image/png;base64,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',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
+        });
+
+        var marker;
+        map.on('click', function (e) {
+            var coords = e.latlng.lat + ', ' + e.latlng.lng;
+            document.getElementById('coords').value = coords;
+
+            if (marker) {
+                map.removeLayer(marker);
+            }
+
+            marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+        });
+
+        document.getElementById('karen-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var title = document.getElementById('title').value;
+            var subtitle = document.getElementById('subtitle').value;
+            var image = document.getElementById('image').value;
+            var coords = document.getElementById('coords').value;
+            var date = new Date(document.getElementById('date').value);
+            var formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`;
+
+            var karenId = Math.random().toString(36).substr(2, 9);
+
+            var data = {
+                Title: title,
+                Subtitle: subtitle,
+                Image: image,
+                Coords: coords,
+                Date: formattedDate,
+                "Karen-ID": karenId,
+                Show: "no"
+            };
+
+            fetch('https://script.google.com/macros/s/AKfycbwHhburtmGXneK41usasImF_Ok7hpBeSpfer4JCnS7vkjOio5mKmTQBzftbiVyuske2Vw/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                alert('Karen added successfully!');
+                document.getElementById('karen-form').reset();
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding Karen.');
+            });
+        });
+
+const myOpenPopupImage = document.getElementById('my-open-popup');
+const myPopup = document.getElementById('my-popup');
+const myClosePopupButton = document.getElementById('my-close-btn');
+
+myOpenPopupImage.addEventListener('click', () => {
+  myPopup.style.display = 'block';
+});
+
+myClosePopupButton.addEventListener('click', () => {
+  myPopup.style.display = 'none';
+});
+
+function closeMyInfo() {
+  myPopup.style.display = 'none';
+}
+    </script>
+</body>
+</html>
