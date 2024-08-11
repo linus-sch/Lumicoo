@@ -10,13 +10,14 @@
         body {
             background-color: #FFFFFF; 
             font-family: Roboto, sans-serif;
+            text-align: center; /* Zentriert den gesamten Text auf der Seite */
         }
         .container {
-            text-align: center;
             display: grid;
             grid-template-columns: repeat(2, 1fr); /* Maximal 2 Spalten */
             gap: 12px; /* Abstand zwischen den Bildern */
             padding: 20px; /* Innenabstand für die Container */
+            justify-content: center; /* Zentriert den Grid-Inhalt */
         }
         
         .image-link {
@@ -31,11 +32,11 @@
         h1 {
             margin-top: 50px;
             font-family: Roboto; 
-            text-align: center; 
         }
         
         .image-link img {
             width: 100%; /* Bildbreite auf 100% setzen */
+            max-width: 450px; /* Maximale Breite auf 450px setzen */
             height: auto;
             border: 3px solid #000; 
             border-radius: 20px; 
