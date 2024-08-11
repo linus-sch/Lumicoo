@@ -1,169 +1,173 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-        <link rel="icon" href="/Img/Home-Favicon" type="image/x-icon">
-    </style>
-    <title>Lumicoo.net</title>
-    <style>
-        body {
-            background-color: #FFFFFF; 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+  <link rel="icon" href="/Img/Home-Favicon" type="image/x-icon">
+</style>
+	<title>Lumicoo.net</title>
+	<style>
+		body {
+			background-color: #FFFFFF; 
             font-family: Roboto, sans-serif;
-            text-align: center; /* Zentriert den gesamten Text auf der Seite */
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Maximal 2 Spalten */
-            gap: 20px; /* Abstand zwischen den Bildern auf 20px setzen */
-            padding: 20px; /* Innenabstand für die Container */
-            justify-content: center; /* Zentriert den Grid-Inhalt */
-        }
-        
-        .image-link {
-            display: block;
-            transition: transform 0.5s; 
-        }
-        
-        .image-link:hover {
-            transform: scale(1.02); 
-        }
-        
-        h1 {
-            margin-top: 50px;
-            font-family: Roboto; 
-        }
-        
+		}
+		.container {
+			text-align: center;
+		}
+		
+		.image-link {
+			display: block;
+                        margin: 0 auto;
+			transition: transform 0.5s; 
+            margin-bottom: 12px;
+		}
+		
+		.image-link:hover {
+			transform: scale(1.02); 
+		}
+		
+		h1 {
+			margin-top: 50px;
+			font-family: Roboto; 
+			text-align: center; 
+		}
+		
         .image-link img {
-            width: 100%; /* Bildbreite auf 100% setzen */
-            max-width: 450px; /* Maximale Breite auf 450px setzen */
-            height: auto;
-            border: 3px solid #000; 
-            border-radius: 20px; 
             transition: box-shadow 0.5s; 
         }
 
         .image-link:hover img {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
-        }
+         }
+    .updates-container {
+      max-width: 408px;
+      margin: 40px auto;
+      padding: 20px;
+      width= 80%;
+      height: 200px;
+      text-align: center; 
+    }
 
-        .updates-container {
-            max-width: 408px;
-            margin: 40px auto;
-            padding: 20px;
-            text-align: center; 
-        }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 94%;
+      margin-bottom: 10px; 
+      padding: 10px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      font-size: 16px;
+    }
 
-        input[type="text"],
-        input[type="email"],
-        textarea {
-            width: 94%;
-            margin-bottom: 10px; 
-            padding: 10px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+    input[type="submit"] {
+      background-color: #3F50B5;
+      color: white;
+      cursor: pointer;
+      padding: 10px 20px;
+      border: 2px solid #000;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      width: 100%;
+      margin-bottom: 0px;
+    }
 
-        input[type="submit"] {
-            background-color: #3F50B5;
-            color: white;
-            cursor: pointer;
-            padding: 10px 20px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            width: 100%;
-            margin-bottom: 0px;
-        }
+    input[type="submit"]:hover {
+      background-color: #303134;
+    }
+    h1 {
+  margin-top: 0;
+}
+.link-section {
+    background-color: #f0f0f0; /* Grauer Hintergrund */
+    padding: 10px; /* Optional: Innenabstand */
+}
 
-        input[type="submit"]:hover {
-            background-color: #303134;
-        }
-
-        .link-section {
-            background-color: #f0f0f0; /* Grauer Hintergrund */
-            padding: 10px; /* Optional: Innenabstand */
-            text-align: center; /* Zentriert den Inhalt */
-        }
-
-        .link {
-            text-decoration: none;
-            color: #000;
-            margin: 0 10px; /* Abstand zwischen den Links */
-        }
-    </style>
+.link {
+    text-decoration: none;
+    color: #000;
+}
+	</style>
 </head>
 <body>
-    <h1>Lumicoo.net</h1>
-    <div class="container">
-        <a href="AB-Thumbnail-Testing-Game/Play.html" class="image-link">
-            <img src="/Img/Banner/AB-Thumbnail-Testing-Game" alt="AB Thumbnail Testing Game">
-        </a>
-        <a href="API-Search.html" class="image-link">
-            <img src="/Img/Banner/API-Search" alt="API Searchengine">
-        </a>
-        <a href="Karen-Radar/Map.html" class="image-link">
-            <img src="/Img/Banner/Karen-Radar" alt="Karen Radar">
-        </a>
-        <a href="TNLT/Feed.html" class="image-link">
-            <img src="/Img/Banner/TNLT" alt="Tech news live ticker">
-        </a>
-    </div>
-    <div class="updates-container">
-        <form id="contact-form" name="contact-form">
-            <h1>Updates</h1>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="hidden" name="source" value="Lumicoo.net-newsletter">
-            <input type="submit" value="Subscribe" id="submit">
-        </form>
-    </div>
-    <div class="link-section">
+<p></p><br>
+	<h1>Lumicoo.net</h1>
+	<div class="container">
+		<a href="AB-Thumbnail-Testing-Game/Play.html" class="image-link">
+			<img src="/Img/Banner/AB-Thumbnail-Testing-Game" alt="AB Thumbnail Testing Game" width="90%" height="auto" style="object-fit: cover; border: 3px solid #000; border-radius: 20px; min-width: 300px; max-width: 450px;"
+> 
+		</a>
+		<a href="API-Search.html" class="image-link">
+			<img src="/Img/Banner/API-Search" alt="API Searchengine" width="90%" height="auto" style="object-fit: cover; border: 3px solid #000; border-radius: 20px; min-width: 300px; max-width: 450px;"
+> 
+		</a>
+        
+        		<a href="Karen-Radar/Map.html" class="image-link">
+			<img src="/Img/Banner/Karen-Radar" alt="Karen Radar" width="90%" height="auto" style="object-fit: cover; border: 3px solid #000; border-radius: 20px; min-width: 300px; max-width: 450px;"
+> 
+		</a>
+        
+        		<a href="TNLT/Feed.html" class="image-link">
+			<img src="/Img/Banner/TNLT" alt="Tech news live ticker" width="90%" height="auto" style="object-fit: cover; border: 3px solid #000; border-radius: 20px; min-width: 300px; max-width: 450px;"
+> 
+</a>
+  <div class="updates-container">
+  <form id="contact-form" name="contact-form">
+    <h1>Updates</h1>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="hidden" name="source" value="Lumicoo.net-newsletter">
+    <input type="submit" value="Subscribe" id="submit">
+  </form>
+</div>
+<p>
+    <div class="link-section"> <!-- Container für die Links -->
         <p>
             <a href="Contact.html" class="link">Contact</a> | 
             <a href="https://www.lumicoo.net/tnlt/datenschutz" class="link">Datenschutz</a>
         </p>
-    </div>
 
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyMxg4QHdtFOlH13KY45tAujfiaNktLy21XCAL4PXOykY9C1GDGCL8hZQUJxEN4nAwC/exec';
-        const form = document.forms['contact-form'];
-        const feedback = document.getElementById('feedback');
+</div>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submit');
-            submitBtn.value = '...';
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyMxg4QHdtFOlH13KY45tAujfiaNktLy21XCAL4PXOykY9C1GDGCL8hZQUJxEN4nAwC/exec';
+  const form = document.forms['contact-form'];
+  const feedback = document.getElementById('feedback');
 
-            const formData = new FormData(form);
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit');
+    submitBtn.value = '...';
 
-            try {
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: formData
-                });
+    const formData = new FormData(form);
 
-                if (response.ok) {
-                    feedback.innerText = 'Message sent successfully!';
-                    form.reset();
-                } else {
-                    feedback.innerText = 'Error! There was a problem adding you to the list!';
-                }
-            } catch (error) {
-                feedback.innerText = 'Error!';
-                console.error('Error!', error.message);
-            } finally {
-                submitBtn.value = 'Subscribe';
-            }
-        });
-    </script>
+    try {
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        feedback.innerText = 'Message sent successfully!';
+        form.reset();
+      } else {
+        feedback.innerText = 'Error! There was a problem adding you to the list!';
+      }
+    } catch (error) {
+      feedback.innerText = 'Error!';
+      console.error('Error!', error.message);
+    } finally {
+      submitBtn.value = 'Subscribe';
+    }
+  });
+</script>
+
 </body>
 </html>
