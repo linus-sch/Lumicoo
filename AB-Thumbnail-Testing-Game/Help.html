@@ -8,58 +8,57 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212; /* Dunkler Hintergrund */
+            background-color: #121212; 
             margin: 0;
             padding: 20px;
-            color: #e0e0e0; /* Helle Schriftfarbe */
+            color: #e0e0e0; 
         }
         .container {
-            max-width: 800px;
+            max-width: 500px;
             margin: 0 auto;
-            background-color: #1e1e1e; /* Dunkler Container */
+            background-color: #1e1e1e; 
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            padding: 30px; /* Mehr Padding im Container */
-            display: flex; /* Flexbox aktivieren */
-            flex-direction: column; /* Elemente in einer Spalte anordnen */
-            align-items: center; /* Elemente horizontal zentrieren */
+            padding: 20px; 
         }
         h1 {
             text-align: center;
             color: #ffffff; 
-            margin-bottom: 30px; /* Mehr Abstand nach unten */
+            margin-bottom: 24px;       
+            font-size: 25px;
+
         }
         h2 {
             color: #ffffff; 
-            margin-top: 30px; /* Mehr Abstand nach oben */
-            margin-bottom: 15px; /* Mehr Abstand nach unten */
+            margin-top: 40px; 
+            margin-bottom: 15px; 
+            font-size: 20px;
         }
         p {
             line-height: 1.6;
-            margin: 15px 0; /* Mehr Abstand oben und unten */
+            margin: 15px 0; 
         }
         .instructions {
             background-color: #2c2c2c; 
             border-left: 4px solid #FF0000; 
-            padding: 15px 20px; /* Mehr Padding */
-            margin: 30px 0; /* Mehr Abstand oben und unten */
+            padding: 15px 20px;
+            margin: 30px 0;
         }
-        .play-button {
-            background-color: #FF0000; /* Roter Hintergrund */
-            color: #FFFFFF; /* Weiße Schrift */
-            font-size: 24px; /* Schriftgröße */
-            font-weight: bold; /* Fette Schrift */
-            padding: 15px 30px; /* Padding für den Button */
-            border: 2px solid #000000; /* 2px schwarzer Rand */
-            border-radius: 5px; /* Abgerundete Ecken */
-            text-align: center; /* Text zentrieren */
-            text-decoration: none; /* Keine Unterstreichung */
-            margin-top: 40px; /* Abstand nach oben */
-            transition: transform 0.3s, box-shadow 0.3s; /* Übergang für Hover-Effekt */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #aaa; 
         }
-        .play-button:hover {
-            transform: scale(1.005); /* Vergrößern beim Hover */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Schatten beim Hover */
+        .youtube-logo {
+            display: inline-block;
+            width: auto;
+            height: auto;
+            padding: 4px 10px; 
+            background-color: #FF0000;
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -71,17 +70,24 @@
         <p>The A/B Thumbnail Testing Game is a fun game where you guess which YouTube thumbnail got more clicks. You will see two thumbnails side by side. Click on the one you think got more clicks. Your correct and incorrect guesses are shown at the top.</p>
         
         <h2>What are A/B tests?</h2>
-        <p>A/B tests are when YouTubers create two different thumbnails for the same video. Some viewers see a thumbnail, and others see the other. This allows YouTubers to see which thumbnail receives more clicks.</p>
+        <p>A/B tests are when YouTubers create two different thumbnails for the same video. Some viewers see one thumbnail, and others see the other. This way, YouTubers can see which thumbnail gets more clicks.</p>
         
         <div class="instructions">
             <h2>How to Play:</h2>
-            <p><strong>Compare the Thumbnails:</strong> Look at the two thumbnails shown.</p>
-            <p><strong>Make Your Choice:</strong> Click on the thumbnail you think performed better.</p>
-            <p><strong>See the Result:</strong> Find out if you were right and keep track of your score.</p>
+            <p><strong>1. Compare the Thumbnails:</strong> Look at the two thumbnails shown.</p>
+            <p><strong>2. Make Your Choice:</strong> Click on the thumbnail you think performed better.</p>
+            <p><strong>3. See the Result:</strong> Find out if you were right and keep track of your score.</p>
         </div>
-        
-        <a href="#" class="play-button">Play Game!</a> <!-- Der Button -->
-        
+        <div style="text-align: center; font-family: Arial, sans-serif; margin-top: 20px;">
+    <a href="/AB-Thumbnail-Testing-Game/Play.html" 
+       style="display: inline-block; background-color: #FF0000; color: white; text-decoration: none; padding: 10px 20px; border: 2px solid #000000; border-radius: 10px; line-height: 20px; transition: transform 0.2s, box-shadow 0.2s;"
+       onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0px 0px 10px rgba(0,0,0,0.2)';"
+       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">Play The Game!</a>
+</div>
+<p></p><br>
+<p style="text-align: center; color: #ffffff;">
+  <a href="/Contact" style="text-decoration: none; color: #ffffff;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #ffffff;" #000;">Datenschutz</a>
+</p>
     </div>
 </body>
 </html>
