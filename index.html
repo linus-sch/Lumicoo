@@ -58,13 +58,12 @@
     input[type="text"],
     input[type="email"],
     textarea {
-      width: 100%;
-      margin-bottom: 10px; /* reduced margin to 10px */
+      width: 94%;
+      margin-bottom: 10px; 
       padding: 10px;
       border: 2px solid #000;
       border-radius: 5px;
       font-size: 16px;
-      font-family: 'Helvetica Neue', sans-serif; /* Schriftart explizit setzen */
     }
 
     input[type="submit"] {
@@ -86,10 +85,19 @@
     h1 {
   margin-top: 0;
 }
+.link-section {
+    background-color: #f0f0f0; /* Grauer Hintergrund */
+    padding: 10px; /* Optional: Innenabstand */
+}
 
+.link {
+    text-decoration: none;
+    color: #000;
+}
 	</style>
 </head>
 <body>
+<p></p><br>
 	<h1>Lumicoo.net</h1>
 	<div class="container">
 		<a href="AB-Thumbnail-Testing-Game/Play.html" class="image-link">
@@ -119,8 +127,11 @@
   </form>
 </div>
 <p>
-<a href="Contact.html" style="text-decoration: none; color: #000;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #000;">Datenschutz</a>
-</p>
+    <div class="link-section"> <!-- Container für die Links -->
+        <p>
+            <a href="Contact.html" class="link">Contact</a> | 
+            <a href="https://www.lumicoo.net/tnlt/datenschutz" class="link">Datenschutz</a>
+        </p>
 
 </div>
 
