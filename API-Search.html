@@ -313,192 +313,190 @@ report
 <p style="text-align: center;">
   <a href="Contact.html" style="text-decoration: none; color: #ffffff;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #ffffff;">Datenschutz</a>
 </p>
-
-  <script>
+	<script>
     document.addEventListener('DOMContentLoaded', () => {
-      loadCategories();
-      loadFeatured();
-      loadPopular();
+        loadCategories();
+        loadFeatured();
+        loadPopular();
+
+        // Check if there's a query parameter in the URL and update the input field
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q');
+        if (query) {
+            document.getElementById('searchInput').value = decodeURIComponent(query);
+            handleSearch();
+        }
     });
-    
+
     function handleSearch() {
-      const query = document.getElementById('searchInput').value.trim();
-      const auth = document.getElementById('authFilter').value;
-      const https = document.getElementById('httpsFilter').value;
-      const cors = document.getElementById('corsFilter').value;
+        const query = document.getElementById('searchInput').value.trim();
+        const auth = document.getElementById('authFilter').value;
+        const https = document.getElementById('httpsFilter').value;
+        const cors = document.getElementById('corsFilter').value;
+        const searchButton = document.querySelector('button');
+        searchButton.classList.add('searching'); // Klasse hinzufügen, um den Ladezustand anzuzeigen
+        
+        if (query) {
+            // Update the URL parameter with the search query
+            const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
+            window.history.replaceState(null, null, newUrl);
 
-      const searchButton = document.querySelector('button');
-      searchButton.classList.add('searching'); // Klasse hinzufügen, um den Ladezustand anzuzeigen
-
-      if (query) {
-        document.getElementById('filters').classList.remove('hidden');
-        searchAPIs(query, auth, https, cors)
-          .finally(() => searchButton.classList.remove('searching')); // Ladezustand nach Abschluss der Suche entfernen
-      } else {
-        document.getElementById('filters').classList.add('hidden');
-        searchButton.classList.remove('searching'); // Bei Leerfeld auch den Ladezustand entfernen
-      }
+            document.getElementById('filters').classList.remove('hidden');
+            searchAPIs(query, auth, https, cors).finally(() => searchButton.classList.remove('searching')); // Ladezustand nach Abschluss der Suche entfernen
+        } else {
+            document.getElementById('filters').classList.add('hidden');
+            searchButton.classList.remove('searching'); // Bei Leerfeld auch den Ladezustand entfernen
+        }
     }
 
     function searchAPIs(query, auth, https, cors) {
-      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?query=${encodeURIComponent(query)}&auth=${auth}&https=${https}&cors=${cors}`;
-      
-      return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          displayResults(data, query);
+        const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?query=${encodeURIComponent(query)}&auth=${auth}&https=${https}&cors=${cors}`;
+        return fetch(url).then(response => response.json()).then(data => {
+            displayResults(data, query);
         });
     }
 
     function displayResults(data, query) {
-      const featuredSection = document.getElementById('featured');
-      const popularSection = document.getElementById('popular');
-      const categoriesSection = document.getElementById('categories');
-
-      // Alle Sektionen ausblenden, außer den Suchergebnissen
-      featuredSection.style.display = 'none';
-      popularSection.style.display = 'none';
-      categoriesSection.style.display = 'none';
-
-      const featuredGrid = document.getElementById('featuredGrid');
-      const popularGrid = document.getElementById('popularGrid');
-      const categoriesGrid = document.getElementById('categoriesGrid');
-
-      featuredGrid.innerHTML = '';
-      popularGrid.innerHTML = '';
-      categoriesGrid.innerHTML = '';
-
-      data.forEach(api => {
-        const apiItem = createAPIItem(api, query);
-
-        // Je nach Kategorie in das entsprechende Grid einfügen
-        if (api.Category === 'Featured') {
-          featuredGrid.appendChild(apiItem);
-          featuredSection.style.display = 'block'; // Nur die Feature-Sektion anzeigen
-        } else if (api.Category === 'Popular') {
-          popularGrid.appendChild(apiItem);
-          popularSection.style.display = 'block'; // Nur die Popular-Sektion anzeigen
-        } else {
-          // Neuen Kategorienabschnitt erstellen, wenn noch nicht vorhanden
-          let categorySection = document.getElementById(api.Category);
-          if (!categorySection) {
-            categorySection = document.createElement('div');
-            categorySection.id = api.Category;
-            categorySection.className = 'category-item';
-            categorySection.innerHTML = `<h2>${api.Category}</h2><div class="api-grid"></div>`;
-            categoriesGrid.appendChild(categorySection);
-          }
-
-          // API-Element zum Kategorienabschnitt hinzufügen
-          categorySection.querySelector('.api-grid').appendChild(apiItem);
-          categoriesSection.style.display = 'block'; // Nur die Kategorien-Sektion anzeigen
-        }
-      });
+        const featuredSection = document.getElementById('featured');
+        const popularSection = document.getElementById('popular');
+        const categoriesSection = document.getElementById('categories');
+        // Alle Sektionen ausblenden, außer den Suchergebnissen
+        featuredSection.style.display = 'none';
+        popularSection.style.display = 'none';
+        categoriesSection.style.display = 'none';
+        const featuredGrid = document.getElementById('featuredGrid');
+        const popularGrid = document.getElementById('popularGrid');
+        const categoriesGrid = document.getElementById('categoriesGrid');
+        featuredGrid.innerHTML = '';
+        popularGrid.innerHTML = '';
+        categoriesGrid.innerHTML = '';
+        data.forEach(api => {
+            const apiItem = createAPIItem(api, query);
+            // Je nach Kategorie in das entsprechende Grid einfügen
+            if (api.Category === 'Featured') {
+                featuredGrid.appendChild(apiItem);
+                featuredSection.style.display = 'block'; // Nur die Feature-Sektion anzeigen
+            } else if (api.Category === 'Popular') {
+                popularGrid.appendChild(apiItem);
+                popularSection.style.display = 'block'; // Nur die Popular-Sektion anzeigen
+            } else {
+                // Neuen Kategorienabschnitt erstellen, wenn noch nicht vorhanden
+                let categorySection = document.getElementById(api.Category);
+                if (!categorySection) {
+                    categorySection = document.createElement('div');
+                    categorySection.id = api.Category;
+                    categorySection.className = 'category-item';
+                    categorySection.innerHTML = `
+                        <h2>${api.Category}</h2>
+                        <div class="api-grid"></div>`;
+                    categoriesGrid.appendChild(categorySection);
+                }
+                // API-Element zum Kategorienabschnitt hinzufügen
+                categorySection.querySelector('.api-grid').appendChild(apiItem);
+                categoriesSection.style.display = 'block'; // Nur die Kategorien-Sektion anzeigen
+            }
+        });
     }
 
-function loadCategories() {
-  const categories = ["AI", "Security", "Data Validation", "Dictionaries", "Geocoding", "Open Source Projects", "Text Analysis", "Cloud Storage & File Sharing", "Anti-Malware", "Art & Design", "Books", "Development", "Phone", "Authentication & Authorization", "Business", "Calendar", "Cryptocurrency", "Currency Exchange", "Documents & Productivity", "Education", "Environment", "Events", "Finance", "Food & Drink", "Fraud Prevention", "Games & Comics", "Government", "Health", "Jobs", "Music", "News", "Open Data",  "Personality", "Photography", "Science & Math", "Shopping", "Social", "Test Data", "Tracking", "Transportation", "URL Shortener", "Vehicle", "Video"];
+    function loadCategories() {
+        const categories = ["AI", "Security", "Data Validation", "Dictionaries", "Geocoding", "Open Source Projects", "Text Analysis", "Cloud Storage & File Sharing", "Anti-Malware", "Art & Design", "Books", "Development", "Phone", "Authentication & Authorization", "Business", "Calendar", "Cryptocurrency", "Currency Exchange", "Documents & Productivity", "Education", "Environment", "Events", "Finance", "Food & Drink", "Fraud Prevention", "Games & Comics", "Government", "Health", "Jobs", "Music", "News", "Open Data", "Personality", "Photography", "Science & Math", "Shopping", "Social", "Test Data", "Tracking", "Transportation", "URL Shortener", "Vehicle", "Video"];
+        const categoriesContainer = document.getElementById('categoriesGrid');
+        categoriesContainer.innerHTML = '';
+        categories.forEach(category => {
+            const section = document.createElement('div');
+            section.className = 'category-item';
+            section.innerHTML = `
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <h2>${category}</h2>
+                    <span class="toggle-icon">expand_more</span>
+                </div>
+                <div class="category-content">
+                    <div class="api-grid" id="${category}"></div>
+                </div>
+            `;
+            categoriesContainer.appendChild(section);
+            fetchCategoryApis(category, 8);
+        });
+    }
 
-  const categoriesContainer = document.getElementById('categoriesGrid');
-  categoriesContainer.innerHTML = '';
-
-  categories.forEach(category => {
-    const section = document.createElement('div');
-    section.className = 'category-item';
-    section.innerHTML = `
-      <div class="category-header" onclick="toggleCategory(this)">
-        <h2>${category}</h2>
-        <span class="toggle-icon">expand_more</span>
-      </div>
-      <div class="category-content">
-        <div class="api-grid" id="${category}"></div>
-      </div>
-    `;
-    categoriesContainer.appendChild(section);
-    fetchCategoryApis(category, 8);
-  });
-}
-
-function toggleCategory(header) {
-  const categoryItem = header.parentElement;
-  categoryItem.classList.toggle('open');
-}
+    function toggleCategory(header) {
+        const categoryItem = header.parentElement;
+        categoryItem.classList.toggle('open');
+    }
 
     function loadFeatured() {
-      fetchFeaturedData().then(data => {
-        const featuredContainer = document.getElementById('featuredGrid');
-        data.forEach(api => {
-          const apiItem = createAPIItem(api, '');
-          featuredContainer.appendChild(apiItem);
+        fetchFeaturedData().then(data => {
+            const featuredContainer = document.getElementById('featuredGrid');
+            data.forEach(api => {
+                const apiItem = createAPIItem(api, '');
+                featuredContainer.appendChild(apiItem);
+            });
         });
-      });
     }
 
     function loadPopular() {
-      fetchPopularData().then(data => {
-        const popularContainer = document.getElementById('popularGrid');
-        data.forEach(api => {
-          const apiItem = createAPIItem(api, '');
-          popularContainer.appendChild(apiItem);
+        fetchPopularData().then(data => {
+            const popularContainer = document.getElementById('popularGrid');
+            data.forEach(api => {
+                const apiItem = createAPIItem(api, '');
+                popularContainer.appendChild(apiItem);
+            });
         });
-      });
     }
-
+    
     async function fetchFeaturedData() {
-      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Featured`;
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+        const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Featured`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
     }
 
     async function fetchPopularData() {
-      const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Popular`;
-      const response = await fetch(url);
-      const data = await response.json();
-      return data;
+        const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=Popular`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
     }
 
     function createAPIItem(api, query) {
-      const apiItem = document.createElement('div');
-      apiItem.className = 'api-item';
-      apiItem.innerHTML = `
-        <h3>${api.Name}</h3>
-        <p>${highlightQuery(api.Description, query)}</p><br>
-        <p><strong>Auth:</strong> ${api.Auth}</p>
-        <p><strong>HTTPS:</strong> ${api.HTTPS}</p>
-        <p><strong>CORS:</strong> ${api.CORS}</p>
-        <a  href="${api.URL}" target="_blank">Visit API</a>
-      `;
-
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${api.URL}&sz=64`;
-      const faviconImg = document.createElement('img');
-      faviconImg.setAttribute('src', faviconUrl);
-      faviconImg.setAttribute('alt', 'Favicon');
-      faviconImg.style.width = '16px';
-      faviconImg.style.height = '16px';
-      faviconImg.style.marginRight = '5px';
-      apiItem.querySelector('h3').prepend(faviconImg);
-
-      return apiItem;
+        const apiItem = document.createElement('div');
+        apiItem.className = 'api-item';
+        apiItem.innerHTML = `
+            <h3>${api.Name}</h3>
+            <p>${highlightQuery(api.Description, query)}</p>
+            <br>
+            <p><strong>Auth:</strong> ${api.Auth}</p>
+            <p><strong>HTTPS:</strong> ${api.HTTPS}</p>
+            <p><strong>CORS:</strong> ${api.CORS}</p>
+            <a href="${api.URL}" target="_blank">Visit API</a>
+        `;
+        const faviconUrl = `https://www.google.com/s2/favicons?domain=${api.URL}&sz=64`;
+        const faviconImg = document.createElement('img');
+        faviconImg.setAttribute('src', faviconUrl);
+        faviconImg.setAttribute('alt', 'Favicon');
+        faviconImg.style.width = '16px';
+        faviconImg.style.height = '16px';
+        faviconImg.style.marginRight = '5px';
+        apiItem.querySelector('h3').prepend(faviconImg);
+        return apiItem;
     }
-function fetchCategoryApis(category, limit) {
-  const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=${encodeURIComponent(category)}`;
 
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      const categoryGrid = document.getElementById(category);
-      categoryGrid.innerHTML = ''; // Clear previous content
+    function fetchCategoryApis(category, limit) {
+        const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?category=${encodeURIComponent(category)}`;
+        fetch(url).then(response => response.json()).then(data => {
+            const categoryGrid = document.getElementById(category);
+            categoryGrid.innerHTML = ''; // Clear previous content
+            data.forEach(api => {
+                const apiItem = createAPIItem(api, '');
+                categoryGrid.appendChild(apiItem);
+            });
+        });
+    }
 
-      data.forEach(api => {
-        const apiItem = createAPIItem(api, '');
-        categoryGrid.appendChild(apiItem);
-      });
-    });
-}
     function highlightQuery(text, query) {
-      if (!query) return text; 
-      const regex = new RegExp(query, 'gi'); // Erstellt eine globale, case-insensitive Regex für den Suchbegriff
-      return text.replace(regex, match => `<mark>${match}</mark>`); // Markiert den Suchbegriff im Text
+        if (!query) return text;
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
     }
-  </script>
+</script>
+
