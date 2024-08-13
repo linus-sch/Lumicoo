@@ -31,7 +31,7 @@
       color: #ffffff; 
         }
     a {
-      color: #fff60c; 
+      color: #ffffff; 
       text-decoration: none;
     }
     
@@ -127,6 +127,7 @@
       background-color: #282828;
       padding: 10px;
       border-radius: 5px;
+      border: 0px solid #555555;
       margin-bottom: 10px;
     }
 
@@ -135,22 +136,27 @@
     }
     
     .api-item h3 {
-      margin: 0 0 5px 0;
+      margin: 5px 0px 5px 10px;
       font-size: 23px;
+      color: #ffffff;
     }
 
+   .api-item div {
+       margin: -10px;
+       margin-bottom: 10px;
+    }
+    
     .api-item p {
       margin: 5px 0;
       font-size: 16px;
     }
 
     .api-item a {
-      color: #1e88e5;
       text-decoration: none;
     }
 
-    .api-item a:hover {
-      text-decoration: underline;
+    .api-item:hover {
+      border: 1px solid #ffffff;
     }
 
     @media (max-width: 350px) {
@@ -238,13 +244,111 @@
 .category-item.open .toggle-icon {
   transform: rotate(180deg);
 }
+    .submit-api-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #282828;
+      height: 30px;
+      color: white;
+      border: 1px solid #ffffff;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+    }
 
+    .submit-api-button:hover {
+      background-color: #1a6cb3;
+    }
+
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .popup-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #343438;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 300px;
+      border: 1px solid #555555;
+      width: 90%;
+    }
+
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #ffffff;
+    }
+
+    .submission-form {
+      text-align: left;
+    }
+
+    .submission-form h2 {
+      margin-top: 0;
+      color: #ffffff;
+    }
+
+    .submission-form textarea {
+      width: 93%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #555;
+      border-radius: 5px;
+      background-color: #282828;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .submission-form input[type="submit"] {
+      background-color: #2081D6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .submission-form input[type="submit"]:hover {
+      background-color: #1a6cb3;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1 style="font-family: 'Bungee', sans-serif; text-align: center; font-size: 40px;"> <span style="color: #2081D6;">API</span> Search</h1>
-
+    <button class="submit-api-button" onclick="openPopup()">+ Submit API</button>
+    <div class="popup-overlay" id="popupOverlay">
+      <div class="popup-content">
+        <span class="close-popup" onclick="closePopup()">&times;</span>
+        <form class="submission-form" method="post" action="https://script.google.com/macros/s/AKfycbxbL4qbdXisOaycJ30pGwBlbLsRfcutsyEXHTFiSmI1GbcOAdfi8DuhAz8tjEVBwLJFoQ/exec">
+          <h2>Submit a new API</h2>
+          <p>We will check the API before publication.</p>
+          <textarea name="link" rows="1" placeholder="example.com"></textarea>
+          <input type="hidden" name="source" value="API-Search - Submission">
+          <input type="submit" value="Submit" id="submit">
+        </form>
+      </div>
+    </div>
     <p style="text-align: center; color: #EEEEEE ">The search engine for APIs</p>
 
     <div class="input-with-button">
@@ -279,24 +383,22 @@
 <p></p><br>
     <div class="section2">
       <div id="featured">
-        <h3>Featured</h3>
-        <hr>
+        <h2>Featured</h2>
         <div class="api-grid" id="featuredGrid"></div>
       </div>
     </div>
 
     <div class="section2">
       <div id="popular">
-        <h3>Popular</h3>
-        <hr>
+        <h2>Popular</h2>
         <div class="api-grid" id="popularGrid"></div>
       </div>
     </div>
 
 <div class="section2">
   <div id="categories">
-    <h3>Categories</h3>
-    <hr>
+    <h2>Categories</h2>
+    <hr/>
     <div id="categoriesGrid"></div>
   </div>
 </div>
@@ -462,13 +564,16 @@ report
         const apiItem = document.createElement('div');
         apiItem.className = 'api-item';
         apiItem.innerHTML = `
+            <a href="${api.URL}" target="_blank">
+            <div>
             <h3>${api.Name}</h3>
+            </div>
             <p>${highlightQuery(api.Description, query)}</p>
             <br>
             <p><strong>Auth:</strong> ${api.Auth}</p>
             <p><strong>HTTPS:</strong> ${api.HTTPS}</p>
             <p><strong>CORS:</strong> ${api.CORS}</p>
-            <a href="${api.URL}" target="_blank">Visit API</a>
+            </a>
         `;
         const faviconUrl = `https://www.google.com/s2/favicons?domain=${api.URL}&sz=64`;
         const faviconImg = document.createElement('img');
@@ -498,5 +603,40 @@ report
         const regex = new RegExp(`(${query})`, 'gi');
         return text.replace(regex, '<mark>$1</mark>');
     }
-</script>
 
+    // New functions for handling the popup
+    function openPopup() {
+      document.getElementById('popupOverlay').style.display = 'block';
+    }
+
+    function closePopup() {
+      document.getElementById('popupOverlay').style.display = 'none';
+    }
+
+    // Modify the existing form submission script
+    const form = document.querySelector('.submission-form');
+    const submitButton = document.getElementById('submit');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      submitButton.value = 'Thanks!';
+      submitButton.disabled = true;
+      const scriptURL = "https://script.google.com/macros/s/AKfycbyMxg4QHdtFOlH13KY45tAujfiaNktLy21XCAL4PXOykY9C1GDGCL8hZQUJxEN4nAwC/exec";
+      const formData = new FormData(form);
+      fetch(scriptURL, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          alert("Your API has been successfully submitted. However, we will review it before publication.");
+          form.reset();
+          submitButton.value = 'Submit';
+          submitButton.disabled = false;
+          closePopup();
+        })
+        .catch(error => {
+          console.error('Error!', error.message);
+          submitButton.value = 'Submit';
+          submitButton.disabled = false;
+        });
+    });
+</script>
