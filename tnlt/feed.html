@@ -274,6 +274,44 @@
 .cookie-banner a {
   text-decoration: underline;
 }
+.voting-container {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+.voting-title {
+    color: #333;
+}
+
+.voting-question {
+    color: #666;
+}
+
+.voting-result {
+    margin-top: 20px;
+    font-weight: bold;
+    color: green;
+}
+
+.voting-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+}
+
+.voting-button:hover {
+    background-color: #e0e0e0;
+}
     </style>
 </head>
 <body>
@@ -297,6 +335,13 @@
         <button id="search-button">Search</button>
     </div>
     <hr>
+    <div class="voting-container" id="votingContainer">
+    <h1 class="voting-title">The information is outdated.</h1>
+    <p class="voting-question">This project has concluded. Do you think we should continue?</p>
+    <button class="voting-button" onclick="recordResponse('Yes')">Ja</button>
+    <button class="voting-button" onclick="recordResponse('No')">Nein</button>
+    <div class="voting-result" id="votingResult"></div>
+</div>
     <div id="news" class="news-container">
         <p id="no-news">News are loading…</p>
     </div>
@@ -336,7 +381,43 @@
         function declineCookies() {
             document.getElementById('cookie-banner').style.display = 'none';
         }
+if (localStorage.getItem('hasVoted')) {
+    document.getElementById('votingContainer').style.display = 'none';
+}
 
+function recordResponse(answer) {
+    document.getElementById('votingResult').innerText = 'Sent successfully';
+
+    // Abstimmungsstatus im localStorage speichern
+    localStorage.setItem('hasVoted', 'true');
+
+    // FormData erstellen
+    const formData = new FormData();
+    formData.append('message', `Do you think we should continue? — ${answer}`);
+
+    // POST-Anfrage an die angegebene URL senden
+    fetch('https://script.google.com/macros/s/AKfycbyMxg4QHdtFOlH13KY45tAujfiaNktLy21XCAL4PXOykY9C1GDGCL8hZQUJxEN4nAwC/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Data sent successfully');
+        } else {
+            console.error('Error sending data');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+window.addEventListener('load', function() {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+        document.getElementById('cookie-banner').style.display = 'none';
+        loadExternalScripts();
+    }
+});
         function loadExternalScripts() {
             // Add your external script URLs here
             var scripts = [
