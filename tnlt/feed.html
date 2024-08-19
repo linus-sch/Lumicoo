@@ -17,10 +17,12 @@
 <meta name="twitter:title" content="Tech news live ticker (Lumicoo.net)">
 <meta name="twitter:description" content="Live feed of all important tech news with a summary. Up-to-date and only the most important.">
 <meta name="twitter:image" content="/Img/TNLT-Banner">
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 	<!-- Google tag (gtag.js) -->
-         <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSGT1M5QP7"></script>
-           <script>
-               window.dataLayer = window.dataLayer || [];
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-KSGT1M5QP7"> 
+         window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
 
@@ -274,6 +276,34 @@
 .cookie-banner a {
   text-decoration: underline;
 }
+.voting-container {
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+.voting-title {
+    color: #333;
+}
+
+.voting-question {
+    color: #666;
+}
+
+.voting-result {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.voting-icon {
+    font-size: 48px;
+    cursor: pointer;
+}
+
     </style>
 </head>
 <body>
@@ -297,6 +327,15 @@
         <button id="search-button">Search</button>
     </div>
     <hr>
+
+
+<div class="voting-container" id="votingContainer">
+    <h1 class="voting-title">The information is outdated.</h1>
+    <p class="voting-question">This project has concluded. Do you think we should continue?</p>
+    <button style="background-color: #2E3CD1; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; font-size: 16px;" onclick="recordResponse('Yes')">Yes</button>
+    <button style="background-color: #2E3CD1; color: white; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; font-size: 16px;" onclick="recordResponse('No')">No</button>
+</div>
+
     <div id="news" class="news-container">
         <p id="no-news">News are loading…</p>
     </div>
@@ -316,215 +355,247 @@
 </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var searchContainer = document.getElementById('search-container');
-            var searchIcon = document.getElementById('search-icon');
-            searchIcon.addEventListener('click', function() {
-                if (searchContainer.style.display === "none" || searchContainer.style.display === "") {
-                    searchContainer.style.display = "block";
-                } else {
-                    searchContainer.style.display = "none";
-                }
-            });
-        });
-
-        function acceptCookies() {
-            document.getElementById('cookie-banner').style.display = 'none';
-            localStorage.setItem('cookiesAccepted', 'true');
-            loadExternalScripts();
+document.addEventListener("DOMContentLoaded", function() {
+    var searchContainer = document.getElementById('search-container');
+    var searchIcon = document.getElementById('search-icon');
+    searchIcon.addEventListener('click', function() {
+        if (searchContainer.style.display === "none" || searchContainer.style.display === "") {
+            searchContainer.style.display = "block";
+        } else {
+            searchContainer.style.display = "none";
         }
+    });
+});
 
-        function declineCookies() {
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
+function checkCookieConsent() {
+    if (localStorage.getItem('cookiesAccepted') === '0') {
+        document.getElementById('cookie-banner').style.display = 'none';
+        loadExternalScripts();
+    } else {
+        document.getElementById('cookie-banner').style.display = 'block';
+    }
+}
 
-        function loadExternalScripts() {
-            // Add your external script URLs here
-            var scripts = [
-            ];
-            scripts.forEach(function(src) {
-                var script = document.createElement('script');
-                script.src = src;
-                script.async = true;
-                document.head.appendChild(script);
-            });
+function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    checkCookieConsent();
+}
 
-function loadGoogleAnalytics() {
-    var script = document.createElement('script');
-    script.src = "https://www.googletagmanager.com/gtag/js?id=G-69R3CTHPS1";
-    script.async = true;
-    document.head.appendChild(script);
+function declineCookies() {
+    document.getElementById('cookie-banner').style.display = 'none';
+}
 
-    script.onload = function() {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-69R3CTHPS1');
+function loadExternalScripts() {
+    // Add your external script URLs here
+    var scripts = [
+    ];
+    scripts.forEach(function(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        document.head.appendChild(script);
+    });
+
+    function loadGoogleAnalytics() {
+        var script = document.createElement('script');
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-69R3CTHPS1";
+        script.async = true;
+        document.head.appendChild(script);
+
+        script.onload = function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-69R3CTHPS1');
+        };
+    }
+
+    // News fetching script
+    let currentPage = 0;
+    const newsPerPage = 10;
+
+    const newsContainer = document.getElementById('news');
+    const loadMoreButton = document.getElementById('loadMore');
+    const noNewsText = document.getElementById('no-news');
+    const refreshIcon = document.getElementById('refresh-icon');
+    const searchIcon = document.getElementById('search-icon');
+    const shareIcon = document.getElementById('share-icon');
+    const searchContainer = document.getElementById('search-container');
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+
+    const extractDomain = (url) => {
+        const link = document.createElement('a');
+        link.href = url;
+        return link.hostname.replace('www.', '');
     };
-  }
 
-            // News fetching script
-            let currentPage = 0;
-            const newsPerPage = 10;
+    const getFaviconUrl = (url) => {
+        const domain = extractDomain(url);
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+    };
 
-            const newsContainer = document.getElementById('news');
-            const loadMoreButton = document.getElementById('loadMore');
-            const noNewsText = document.getElementById('no-news');
-            const refreshIcon = document.getElementById('refresh-icon');
-            const searchIcon = document.getElementById('search-icon');
-            const shareIcon = document.getElementById('share-icon');
-            const searchContainer = document.getElementById('search-container');
-            const searchInput = document.getElementById('search-input');
-            const searchButton = document.getElementById('search-button');
+    const highlightSearchResults = (text, searchTerm) => {
+        const regex = new RegExp(`(${searchTerm})`, 'gi');
+        return text.replace(regex, `<span class="highlighted">$&</span>`);
+    };
 
-            const extractDomain = (url) => {
-                const link = document.createElement('a');
-                link.href = url;
-                return link.hostname.replace('www.', '');
-            };
+    const fetchNews = (page) => {
+        fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
+        .then(response => response.json())
+        .then(news => {
+            const filteredNews = news.filter(item => item.show === 'yes');
+            const start = page * newsPerPage;
+            const end = start + newsPerPage;
+            const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
 
-            const getFaviconUrl = (url) => {
-                const domain = extractDomain(url);
-                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-            };
+            const newsToDisplay = reversedNews.slice(start, end);
 
-            const highlightSearchResults = (text, searchTerm) => {
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                return text.replace(regex, `<span class="highlighted">$&</span>`);
-            };
-
-            const fetchNews = (page) => {
-                fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
-                .then(response => response.json())
-                .then(news => {
-                    const filteredNews = news.filter(item => item.show === 'yes');
-                    const start = page * newsPerPage;
-                    const end = start + newsPerPage;
-                    const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
-
-                    const newsToDisplay = reversedNews.slice(start, end);
-
-                    if (newsToDisplay.length === 0 && page === 0) {
-                        noNewsText.style.display = 'block';
-                        loadMoreButton.style.display = 'none';
-                        return;
-                    } else if (newsToDisplay.length === 0) {
-                        loadMoreButton.style.display = 'none';
-                        return;
-                    }
-
-                    noNewsText.style.display = 'none';
-
-                    const newsHTML = newsToDisplay.map(item => {
-                        const date = new Date(item.date);
-                        date.setDate(date.getDate() + 1)
-                        const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
-                        const domain = extractDomain(item.link);
-                        const faviconUrl = getFaviconUrl(item.link);
-                        const highlightedTitle = highlightSearchResults(item.title, searchInput.value); // Highlight search input in title
-                        return `
-                            <div class="news-item">
-
-<p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
-
-                                <h2>${highlightedTitle}</h2>
-                                <div class="news-date">${formattedDate}</div>
-                                <p><a href="${item.link}" target="_blank">Read more</a></p>
-                            </div>
-                            <hr>
-                        `;
-                    }).join('');
-
-                    newsContainer.innerHTML += newsHTML;
-                })
-                .catch(error => console.error('Error:', error));
-            };
-
-            const refreshNews = () => {
-                newsContainer.innerHTML = '';
-                currentPage = 0;
-                fetchNews(currentPage);
-            };
-
-            const searchNews = (query) => {
-                fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
-                .then(response => response.json())
-                .then(news => {
-                    const filteredNews = news.filter(item => item.show === 'yes' && item.title.toLowerCase().includes(query.toLowerCase()));
-                    const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
-
-                    if (reversedNews.length === 0) {
-                        newsContainer.innerHTML = '<p>No results found.</p>';
-                        loadMoreButton.style.display = 'none';
-                        return;
-                    }
-
-                    noNewsText.style.display = 'none';
-                    loadMoreButton.style.display = 'none'; // Hide load more button for search results
-
-                    const newsHTML = reversedNews.map(item => {
-                        const date = new Date(item.date);
-                        date.setDate(date.getDate() + 1)
-                        const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
-                        const domain = extractDomain(item.link);
-                        const faviconUrl = getFaviconUrl(item.link);
-                        const highlightedTitle = highlightSearchResults(item.title, query); // Highlight search query in title
-                        return `
-                            <div class="news-item">
-
-<p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
-
-                                <h2>${highlightedTitle}</h2>
-                                <div class="news-date">${formattedDate}</div>
-                                <p><a href="${item.link}" target="_blank">Read more</a></p>
-                            </div>
-                            <hr>
-                        `;
-                    }).join('');
-
-                    newsContainer.innerHTML = newsHTML;
-                })
-                .catch(error => console.error('Error:', error));
-            };
-
-            loadMoreButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentPage++;
-                fetchNews(currentPage);
-            });
-
-            refreshIcon.addEventListener('click', refreshNews);
-
-            searchIcon.addEventListener('click', () => {
-                searchContainer.style.display = searchContainer.style.display === 'none' ? 'block' : 'none';
-            });
-
-            searchButton.addEventListener('click', () => {
-                const query = searchInput.value;
-                searchNews(query);
-            });
-
-            searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const query = searchInput.value;
-                    searchNews(query);
-                }
-            });
-
-            shareIcon.addEventListener('click', () => {
-                const emailLink = 'mailto:contact-tnlt@lumicoo.com';
-                window.open(emailLink, '_blank');
-            });
-
-            fetchNews(currentPage); // Load initial news on page load
-        }
-
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('cookiesAccepted') === 'true') {
-                document.getElementById('cookie-banner').style.display = 'none';
-                loadExternalScripts();
+            if (newsToDisplay.length === 0 && page === 0) {
+                noNewsText.style.display = 'block';
+                loadMoreButton.style.display = 'none';
+                return;
+            } else if (newsToDisplay.length === 0) {
+                loadMoreButton.style.display = 'none';
+                return;
             }
-        });
+
+            noNewsText.style.display = 'none';
+
+            const newsHTML = newsToDisplay.map(item => {
+                const date = new Date(item.date);
+                date.setDate(date.getDate() + 1)
+                const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
+                const domain = extractDomain(item.link);
+                const faviconUrl = getFaviconUrl(item.link);
+                const highlightedTitle = highlightSearchResults(item.title, searchInput.value); // Highlight search input in title
+                return `
+                    <div class="news-item">
+                        <p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
+                        <h2>${highlightedTitle}</h2>
+                        <div class="news-date">${formattedDate}</div>
+                        <p><a href="${item.link}" target="_blank">Read more</a></p>
+                    </div>
+                    <hr>
+                `;
+            }).join('');
+
+            newsContainer.innerHTML += newsHTML;
+        })
+        .catch(error => console.error('Error:', error));
+    };
+
+    const refreshNews = () => {
+        newsContainer.innerHTML = '';
+        currentPage = 0;
+        fetchNews(currentPage);
+    };
+
+    const searchNews = (query) => {
+        fetch('https://script.google.com/macros/s/AKfycbzl1PQi-idnoT7i2wx9Dwe5KMO14Z0HMflxsQGYn89zAES37wXskzRpqYFUf3wRp4Rt/exec')
+        .then(response => response.json())
+        .then(news => {
+            const filteredNews = news.filter(item => item.show === 'yes' && item.title.toLowerCase().includes(query.toLowerCase()));
+            const reversedNews = filteredNews.slice().reverse(); // Reverse the entire array
+
+            if (reversedNews.length === 0) {
+                newsContainer.innerHTML = '<p>No results found.</p>';
+                loadMoreButton.style.display = 'none';
+                return;
+            }
+
+            noNewsText.style.display = 'none';
+            loadMoreButton.style.display = 'none'; // Hide load more button for search results
+
+            const newsHTML = reversedNews.map(item => {
+                const date = new Date(item.date);
+                date.setDate(date.getDate() + 1)
+                const formattedDate = date.toISOString().split('T')[0]; // Formats date to YYYY-MM-DD
+                const domain = extractDomain(item.link);
+                const faviconUrl = getFaviconUrl(item.link);
+                const highlightedTitle = highlightSearchResults(item.title, query); // Highlight search query in title
+                return `
+                    <div class="news-item">
+                        <p><a href="${item.link}" target="_blank"><span class="favicon-circle"><img src="${faviconUrl}" alt="favicon" width="16" height="16"></span> ${domain}</a></p>
+                        <h2>${highlightedTitle}</h2>
+                        <div class="news-date">${formattedDate}</div>
+                        <p><a href="${item.link}" target="_blank">Read more</a></p>
+                    </div>
+                    <hr>
+                `;
+            }).join('');
+
+            newsContainer.innerHTML = newsHTML;
+        })
+        .catch(error => console.error('Error:', error));
+    };
+
+    loadMoreButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentPage++;
+        fetchNews(currentPage);
+    });
+
+    refreshIcon.addEventListener('click', refreshNews);
+
+    searchIcon.addEventListener('click', () => {
+        searchContainer.style.display = searchContainer.style.display === 'none' ? 'block' : 'none';
+    });
+
+    searchButton.addEventListener('click', () => {
+        const query = searchInput.value;
+        searchNews(query);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const query = searchInput.value;
+            searchNews(query);
+        }
+    });
+
+    shareIcon.addEventListener('click', () => {
+        const emailLink = 'mailto:contact-tnlt@lumicoo.com';
+        window.open(emailLink, '_blank');
+    });
+
+    fetchNews(currentPage); // Load initial news on page load
+}
+
+// Überprüfen, ob der Benutzer bereits abgestimmt hat
+if (localStorage.getItem('hasVoted')) {
+    document.getElementById('votingContainer').style.display = 'none';
+}
+
+function recordResponse(answer) {
+    const message = `Do you think we should continue? — ${answer}`;
+    document.getElementById('votingResult').innerText = message;
+
+    // Abstimmungsstatus im localStorage speichern
+    localStorage.setItem('hasVoted', 'true');
+
+    // FormData erstellen
+    const formData = new FormData();
+    formData.append('message', message);
+
+    // POST-Anfrage an die angegebene URL senden
+    fetch('https://script.google.com/macros/s/AKfycbyMxg4QHdtFOlH13KY45tAujfiaNktLy21XCAL4PXOykY9C1GDGCL8hZQUJxEN4nAwC/exec', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Data sent successfully');
+        } else {
+            console.error('Error sending data');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+window.addEventListener('load', function() {
+    checkCookieConsent();
+});
     </script>
-</body>
-</html>
