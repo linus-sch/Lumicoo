@@ -598,4 +598,8 @@ function recordResponse(answer) {
 window.addEventListener('load', function() {
     checkCookieConsent();
 });
+	    document.querySelector('.cookie-banner button').addEventListener('click', function() {
+    document.querySelector('.cookie-banner').style.display = 'none';
+});
+
     </script>
