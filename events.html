@@ -86,55 +86,57 @@
     <div id="events"></div>
 
     <script>
-        async function fetchEvents() {
-            try {
-                const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.techmeme.com/events');
-                const text = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const eventsContainer = document.getElementById('events');
-                const events = doc.querySelectorAll('.ne:not(.nf)');
-                
-                document.getElementById('loading').style.display = 'none';
-                
-                events.forEach(event => {
-                    const newEvent = document.createElement('div');
-                    newEvent.className = 'event';
-                    
-                    const link = event.querySelector('a');
-                    const date = link.querySelector('div:first-child').textContent;
-                    const title = link.querySelector('div:nth-child(2)').textContent;
-                    const location = link.querySelector('div:last-child').textContent;
-                    
-                    const isHybrid = title.includes('HYBRID:');
-                    const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
+async function fetchEvents() {
+    try {
+        const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.techmeme.com/events'));
+        const data = await response.json();
+        const text = data.contents; // Der Inhalt der Antwort
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const eventsContainer = document.getElementById('events');
+        const events = doc.querySelectorAll('.ne:not(.nf)');
+        
+        document.getElementById('loading').style.display = 'none';
+        
+        events.forEach(event => {
+            const newEvent = document.createElement('div');
+            newEvent.className = 'event';
+            
+            const link = event.querySelector('a');
+            const date = link.querySelector('div:first-child').textContent;
+            const title = link.querySelector('div:nth-child(2)').textContent;
+            const location = link.querySelector('div:last-child').textContent;
+            
+            const isHybrid = title.includes('HYBRID:');
+            const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
 
-                    // Überprüfen, ob die Domain eine der angegebenen ist
-                    const domain = new URL(link.href).hostname;
-                    if (domain.endsWith('apple.com') || domain.endsWith('microsoft.com') || domain.endsWith('meta.com')) {
-                        newEvent.classList.add('highlight'); // Füge die Highlight-Klasse hinzu
-                    }
-
-                    newEvent.innerHTML = `
-                        <a href="${link.href}">
-                            <div class="event-date">${date}</div>
-                            <div class="event-title">
-                                ${isHybrid ? '<span class="event-type hybrid">HYBRID</span>' : ''}
-                                ${cleanTitle}
-                            </div>
-                            <div class="event-location">${location}</div>
-                        </a>
-                    `;
-                    
-                    eventsContainer.appendChild(newEvent);
-                });
-            } catch (error) {
-                console.error('Fehler beim Laden der Events:', error);
-                document.getElementById('loading').textContent = 'Fehler beim Laden der Events. Bitte versuchen Sie es später erneut.';
+            // Überprüfen, ob die Domain eine der angegebenen ist
+            const domain = new URL(link.href).hostname;
+            if (domain.endsWith('apple.com') || domain.endsWith('microsoft.com') || domain.endsWith('meta.com')) {
+                newEvent.classList.add('highlight'); // Füge die Highlight-Klasse hinzu
             }
-        }
 
-        fetchEvents();
+            newEvent.innerHTML = `
+                <a href="${link.href}">
+                    <div class="event-date">${date}</div>
+                    <div class="event-title">
+                        ${isHybrid ? '<span class="event-type hybrid">HYBRID</span>' : ''}
+                        ${cleanTitle}
+                    </div>
+                    <div class="event-location">${location}</div>
+                </a>
+            `;
+            
+            eventsContainer.appendChild(newEvent);
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Events:', error);
+        document.getElementById('loading').textContent = 'Fehler beim Laden der Events. Bitte versuchen Sie es später erneut.';
+    }
+}
+
+fetchEvents();
+
     </script>
 </body>
 </html>
