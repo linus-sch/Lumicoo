@@ -110,14 +110,18 @@ async function fetchEvents() {
             const isHybrid = title.includes('HYBRID:');
             const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
 
-            // Überprüfen, ob die Domain eine der angegebenen ist
-            const domain = new URL(link.href).hostname;
-            if (domain.endsWith('apple.com') || domain.endsWith('microsoft.com') || domain.endsWith('meta.com')) {
+            // Extrahiere den Link nach "rd/"
+            const originalUrl = link.href;
+            const urlPart = originalUrl.split('/r2/')[1]; // Teile die URL und nimm den Teil nach "/r2/"
+            const formattedUrl = urlPart ? urlPart.replace(/_/g, '/').replace('.htm', '') : ''; // Ersetze "_" durch "/" und entferne ".htm"
+
+            // Überprüfen, ob die URL eine der angegebenen Domains enthält
+            if (formattedUrl.includes('apple.com') || formattedUrl.includes('microsoft.com') || formattedUrl.includes('meta.com')) {
                 newEvent.classList.add('highlight'); // Füge die Highlight-Klasse hinzu
             }
 
             newEvent.innerHTML = `
-                <a href="${link.href}">
+                <a href="${originalUrl}">
                     <div class="event-date">${date}</div>
                     <div class="event-title">
                         ${isHybrid ? '<span class="event-type hybrid">HYBRID</span>' : ''}
