@@ -1,112 +1,7 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Techmeme Events</title>
-    
-    <link rel="icon" href="path/to/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="path/to/apple-touch-icon.png">
-    <link rel="icon" sizes="192x192" href="path/to/android-chrome-192x192.png">
-    <link rel="icon" sizes="512x512" href="path/to/android-chrome-512x512.png">
-
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 450px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        ul#events-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-
-        }
-
-        ul#events-list li {
-            padding: 10px;
-            margin: 5px;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            border-bottom: 4px solid #FEE4A8;
-        }
-
-        ul#events-list li a {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        ul#events-list li.highlight {
-            background-color: #FEE4A8;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 2px solid #FDC700;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        ul#events-list li a .event-date {
-            font-size: 0.9em;
-            color: #858585;
-        }
-
-        ul#events-list li a .event-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        ul#events-list li a .event-location {
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-
-        #loading {
-            text-align: center;
-            font-style: italic;
-            color: #7f8c8d;
-            
-        }
-      
-        #event-type {
-            display: none;
-            
-        } 
-        
-       h3 {
-    text-align: center; 
-    margin-top: 0px;
-    font-weight: normal;
-}
- .event-type.hybrid {
-    display: none;
-}
-
-        </style>
-</head>
-<body>
-    <h1>Upcoming Events</h1>
-    <h3>Technology</h3>
-    <div id="loading">Loading Events...</div>
-    <ul id="events-list"></ul>
-
     <script>
+    // Keywords, die gehighlighted werden sollen, zentral definiert
+    const highlightKeywords = ["apple.com", "microsoft.com", "meta.com"];
+    
     async function fetchEvents() {
         try {
             const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.techmeme.com/events'));
@@ -138,7 +33,7 @@
                 urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
 
                 // Highlight wenn bestimmte Domains enthalten sind
-                if (urlPart.includes('apple.com') || urlPart.includes('microsoft.com') || urlPart.includes('meta.com')) {
+                if (highlightKeywords.some(keyword => urlPart.includes(keyword))) {
                     newEvent.classList.add('highlight');
                 }
 
@@ -162,11 +57,9 @@
     function getDaysRemaining(eventDate) {
         const now = new Date();
         const totalDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
-        return totalDays >= 0 ? totalDays : 0; // Gibt 0 zurück, wenn das Event bereits begonnen hat
+        return totalDays >= 0 ? totalDays : 0;
     }
 
     fetchEvents();
 
     </script>
-</body>
-</html>
