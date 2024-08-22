@@ -75,8 +75,8 @@
             color: #7f8c8d;
         }
         .highlight {
-            background-color: rgba(255, 255, 204, 0.5); /* Leichter Gelbton */
-            border: 2px solid #f0e68c; /* Hellgelber Rahmen */
+            background-color: #cee0f3; /* Leichter Gelbton */
+            border: 2px solid #3f50b5; /* Hellgelber Rahmen */
         }
     </style>
 </head>
@@ -103,10 +103,14 @@ async function fetchEvents() {
             newEvent.className = 'event';
             
             const link = event.querySelector('a');
-            const date = link.querySelector('div:first-child').textContent;
+            const dateText = link.querySelector('div:first-child').textContent;
             const title = link.querySelector('div:nth-child(2)').textContent;
             const location = link.querySelector('div:last-child').textContent;
-            
+
+            // Konvertiere das Datum in ein JavaScript-Datum
+            const eventDate = new Date(dateText);
+            const daysRemaining = getDaysRemaining(eventDate);
+
             const isHybrid = title.includes('HYBRID:');
             const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
 
@@ -122,7 +126,7 @@ async function fetchEvents() {
 
             newEvent.innerHTML = `
                 <a href="${originalUrl}">
-                    <div class="event-date">${date}</div>
+                    <div class="event-date">${dateText} - ${daysRemaining} Tag${daysRemaining !== 1 ? 'e' : ''} </div>
                     <div class="event-title">
                         ${isHybrid ? '<span class="event-type hybrid">HYBRID</span>' : ''}
                         ${cleanTitle}
@@ -139,9 +143,14 @@ async function fetchEvents() {
     }
 }
 
+function getDaysRemaining(eventDate) {
+    const now = new Date();
+    const totalDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
+    return totalDays >= 0 ? totalDays : 0; // Gibt 0 zurück, wenn das Event bereits begonnen hat
+}
+
 fetchEvents();
 
     </script>
 </body>
 </html>
-
