@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS Feed Anzeige</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .feed-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>RSS Feed</h1>
+    <div id="rss-feed"></div>
+
+    <script>
+        const rssUrl = 'https://script.google.com/macros/s/AKfycbyfdWxqHRc9ur7KKpIz1j1UxbJaqB9uigdw-aeThe-Ynts0ISzVoV1icNYvLfT0XTjp8Q/exec';
+
+        async function fetchRSS() {
+            try {
+                const response = await fetch(rssUrl);
+                const data = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, "text/xml");
+                const items = xmlDoc.getElementsByTagName('item');
+                const feedContainer = document.getElementById('rss-feed');
+
+                for (let i = 0; i < items.length; i++) {
+                    const title = items[i].getElementsByTagName('title')[0].textContent;
+                    const link = items[i].getElementsByTagName('link')[0].textContent;
+                    const description = items[i].getElementsByTagName('description')[0].textContent;
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('feed-item');
+                    itemDiv.innerHTML = `<h2><a href="${link}" target="_blank">${title}</a></h2><p>${description}</p>`;
+                    feedContainer.appendChild(itemDiv);
+                }
+            } catch (error) {
+                console.error('Fehler beim Abrufen des RSS-Feeds:', error);
+            }
+        }
+
+        fetchRSS();
+    </script>
+</body>
+</html>
