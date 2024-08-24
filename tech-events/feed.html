@@ -21,27 +21,35 @@
             background-color: #f9f9f9;
         }
 
-        h1 {
+        h1, h2 {
             color: #333;
             text-align: center;
             font-weight: 600;
-            margin-bottom: 2px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: normal;
         }
 
         ul#events-list {
             list-style: none;
             padding: 0;
             margin: 0;
-
         }
 
         ul#events-list li {
             padding: 10px;
-            margin: 5px;
-            background-color: #ffffff;
+            margin: 5px 0;
+            background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             border-bottom: 4px solid #FEE4A8;
+            transition: transform 0.2s ease;
+        }
+
+        ul#events-list li:hover {
+            transform: translateY(-5px);
         }
 
         ul#events-list li a {
@@ -52,16 +60,15 @@
 
         ul#events-list li.highlight {
             background-color: #FEE4A8;
+            border: 2px solid #FDC700;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 2px solid #FDC700;
-            margin-top: 10px;
-            margin-bottom: 10px;
         }
 
-        ul#events-list li a .event-date {
+        ul#events-list li a .event-date,
+        ul#events-list li a .event-location {
             font-size: 0.9em;
-            color: #858585;
+            color: #7f8c8d;
         }
 
         ul#events-list li a .event-title {
@@ -72,103 +79,312 @@
             color: #2c3e50;
         }
 
-        ul#events-list li a .event-location {
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
-
         #loading {
             text-align: center;
             font-style: italic;
             color: #7f8c8d;
-            
         }
-      
-        #event-type {
-            display: none;
-            
-        } 
         
-       h3 {
-    text-align: center; 
-    margin-top: 0px;
-    font-weight: normal;
-}
- .event-type.hybrid {
-    display: none;
+#closePopup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #333; 
+    color: white; /* Textfarbe */
+    border: none; /* Kein Rahmen */
+    width: 30px; /* Breite des Buttons */
+    height: 30px; /* Höhe des Buttons */
+    padding: 0; /* Kein Innenabstand */
+    cursor: pointer; /* Zeiger-Cursor */
+    text-align: center; /* Textzentrierung */
+    line-height: 10px; /* Text vertikal zentrieren */
+    font-size: 12px; /* Kleinere Schriftgröße für das "X" */
+    border-radius: 10%; /* Runde Form */
 }
 
-        </style>
+
+.popup {
+    position: relative; /* Ermöglicht absolute Positionierung von Kinderelementen */
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    padding-top: 40px; /* Platz schaffen für den "Close" Button */
+}
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .round-button {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .round-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .round-button img {
+            width: 25px;
+            height: 25px;
+            margin-left: -20px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+
+        /* Popup-Stil */
+        .popup,
+        .small-popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            z-index: 1000;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        .small-popup {
+            width: 70%;
+            max-width: 250px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .popup h1 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .popup label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .popup input[type="email"] {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .popup button,
+        .small-popup button {
+            background-color: #ffd044;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .popup button:hover,
+        .small-popup button:hover {
+            background-color: #ffb432;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+
+    </style>
 </head>
 <body>
     <h1>Upcoming Events</h1>
-    <h3>Technology</h3>
+    <h2>Technology</h2>
+    <div class="button-container">
+        <button class="round-button" id="newsletterButton">
+            <img src="https://i.ibb.co/1G3qQzz/2.png" alt="Newsletter Icon">
+            Newsletter
+        </button>
+        <button class="round-button" id="rssButton">
+            <img src="https://i.ibb.co/W3F005V/3.png" alt="RSS Icon">
+            RSS
+        </button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+    <button id="closePopup">X</button> <!-- Button muss hier sein -->
+        <h1>Subscribe to our Newsletter</h1>
+        <p>Receive a weekly email with upcoming tech events.</p>
+
+        <form id="emailForm">
+            <label for="email">E-Mail-Adress:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    <div class="small-popup" id="smallPopup">
+        <p>The RSS feed URL has been copied into your clipboard!</p>
+        <button id="closeSmallPopup">OK</button>
+    </div>
     <div id="loading">Loading Events...</div>
     <ul id="events-list"></ul>
 
     <script>
-    // Keywords, die gehighlighted werden sollen, zentral definiert
-    const highlightKeywords = ["apple", "microsoft", "meta" , "nvidia", "openai", "google", "amazon", "copilot", "tesla", "adobe", "ibm", "tencent", "netflix", "sap", "qualcomm"];
-    
-    async function fetchEvents() {
-        try {
-            const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.techmeme.com/events'));
-            const data = await response.json();
-            const text = data.contents;
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            const eventsContainer = document.getElementById('events-list');
-            const events = doc.querySelectorAll('.ne:not(.nf)');
+// Keywords, die gehighlighted werden sollen, zentral definiert
+const highlightKeywords = ["apple", "microsoft", "meta" , "nvidia", "openai", "google", "amazon", "copilot", "tesla", "adobe", "ibm", "tencent", "netflix", "sap", "qualcomm"];
+
+async function fetchEvents() {
+    try {
+        const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.techmeme.com/events'));
+        const data = await response.json();
+        const text = data.contents;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const eventsContainer = document.getElementById('events-list');
+        const events = doc.querySelectorAll('.ne:not(.nf)');
+        
+        document.getElementById('loading').style.display = 'none';
+        
+        events.forEach(event => {
+            const newEvent = document.createElement('li');
             
-            document.getElementById('loading').style.display = 'none';
+            const link = event.querySelector('a');
+            const dateText = link.querySelector('div:first-child').textContent;
+            const title = link.querySelector('div:nth-child(2)').textContent;
+            const location = link.querySelector('div:last-child').textContent;
+
+            const eventDate = new Date(dateText);
+            const daysRemaining = getDaysRemaining(eventDate);
+
+            const isHybrid = title.includes('HYBRID:');
+            const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
+
+            // URL-Verarbeitung
+            let urlPart = link.href.split('/r2/')[1];
+            urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
+
+            // Highlight wenn bestimmte Domains enthalten sind
+            if (highlightKeywords.some(keyword => urlPart.includes(keyword))) {
+                newEvent.classList.add('highlight');
+            }
+
+            // Event HTML-Template
+            newEvent.innerHTML = `
+                <a href="https://${urlPart}">
+                    <div class="event-date">${dateText} - ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
+                    <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
+                    <div class="event-location">${location}</div>
+                </a>
+            `;
             
-            events.forEach(event => {
-                const newEvent = document.createElement('li');
-                
-                const link = event.querySelector('a');
-                const dateText = link.querySelector('div:first-child').textContent;
-                const title = link.querySelector('div:nth-child(2)').textContent;
-                const location = link.querySelector('div:last-child').textContent;
-
-                const eventDate = new Date(dateText);
-                const daysRemaining = getDaysRemaining(eventDate);
-
-                const isHybrid = title.includes('HYBRID:');
-                const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
-
-                // URL-Verarbeitung
-                let urlPart = link.href.split('/r2/')[1];
-                urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
-
-                // Highlight wenn bestimmte Domains enthalten sind
-                if (highlightKeywords.some(keyword => urlPart.includes(keyword))) {
-                    newEvent.classList.add('highlight');
-                }
-
-                // Event HTML-Template
-                newEvent.innerHTML = `
-                    <a href="https://${urlPart}">
-                        <div class="event-date">${dateText} - ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
-                        <div class="event-title">${isHybrid ? '<span class="event-type hybrid">HYBRID</span>' : ''} ${cleanTitle}</div>
-                        <div class="event-location">${location}</div>
-                    </a>
-                `;
-                
-                eventsContainer.appendChild(newEvent);
-            });
-        } catch (error) {
-            console.error('Fehler beim Laden der Events:', error);
-            document.getElementById('loading').textContent = 'Error loading events. Please try again later.';
-        }
+            eventsContainer.appendChild(newEvent);
+        });
+    } catch (error) {
+        console.error('Fehler beim Laden der Events:', error);
+        document.getElementById('loading').textContent = 'Error loading events. Please try again later.';
     }
+}
 
-    function getDaysRemaining(eventDate) {
-        const now = new Date();
-        const totalDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
-        return totalDays >= 0 ? totalDays : 0;
-    }
+function getDaysRemaining(eventDate) {
+    const now = new Date();
+    const totalDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
+    return totalDays >= 0 ? totalDays : 0;
+}
 
-    fetchEvents();
+fetchEvents();
+
+// Popup-Funktionalität
+const newsletterButton = document.getElementById('newsletterButton');
+const overlay = document.getElementById('overlay');
+const popup = document.getElementById('popup');
+const closePopup = document.getElementById('closePopup');
+
+newsletterButton.addEventListener('click', function() {
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+});
+
+closePopup.addEventListener('click', function() {
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+});
+
+// RSS-Button Funktionalität
+const rssButton = document.getElementById('rssButton');
+const rssUrl = 'https://script.google.com/macros/s/AKfycbz9Hj0zVJgW7p46xC5eU7xfNiD3fZQuQTp96RpRw105pf3Ck9huDmkcK2cdLe_ThWxV/exec'; // RSS-URL
+
+rssButton.addEventListener('click', function() {
+    navigator.clipboard.writeText(rssUrl).then(function() {
+        // Kleines Popup anzeigen
+        const smallPopup = document.getElementById('smallPopup');
+        smallPopup.style.display = 'block';
+    }, function(err) {
+        console.error('Fehler beim Kopieren: ', err);
+    });
+});
+
+// Schließen des kleinen Popups
+const closeSmallPopup = document.getElementById('closeSmallPopup');
+closeSmallPopup.addEventListener('click', function() {
+    const smallPopup = document.getElementById('smallPopup');
+    smallPopup.style.display = 'none';
+});
+
+// Formularverarbeitung
+document.getElementById('emailForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Verhindert das Standardverhalten des Formulars
+
+    const email = document.getElementById('email').value;
+    const submitButton = event.target.querySelector('button[type="submit"]');
+
+    // Setze den Button-Text auf "Loading"
+    submitButton.textContent = 'Loading...';
+    submitButton.disabled = true; // Deaktiviere den Button während des Ladens
+
+    fetch('https://script.google.com/macros/s/AKfycbw5y2eu3Efnvy1PVIu_HqDp1wZ1PSjmat66bgYHsMyGR3rIDeutES9si9PUdIzTmDw4/exec', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'action=add&email=' + encodeURIComponent(email)
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+        alert('E-Mail hinzugefügt: ' + email);
+        submitButton.textContent = 'Subscribe'; // Button-Text zurücksetzen
+        submitButton.disabled = false; // Button wieder aktivieren
+        document.getElementById('emailForm').reset(); // Formular zurücksetzen
+        closePopup.click(); // Schließt das Popup nach dem Hinzufügen
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        submitButton.textContent = 'Subscribe'; // Button-Text zurücksetzen
+        submitButton.disabled = false; // Button wieder aktivieren
+    });
+});
 
     </script>
 </body>
