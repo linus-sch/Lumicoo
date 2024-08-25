@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSS Feed -- Upcoming Events in Tech</title>
+        <meta property="og:image" content="/img/banner/upcoming-events" />
+
     <style>
         body {
             font-family: Arial, sans-serif;
