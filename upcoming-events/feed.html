@@ -271,41 +271,41 @@ async function fetchEvents() {
         
         document.getElementById('loading').style.display = 'none';
         
-        events.forEach(event => {
-            const newEvent = document.createElement('li');
-            
-            const link = event.querySelector('a');
-            const dateText = link.querySelector('div:first-child').textContent;
-            const title = link.querySelector('div:nth-child(2)').textContent;
-            const location = link.querySelector('div:last-child').textContent;
+events.forEach(event => {
+    const newEvent = document.createElement('li');
+    
+    const link = event.querySelector('a');
+    const dateText = link.querySelector('div:first-child').textContent;
+    const title = link.querySelector('div:nth-child(2)').textContent;
+    const location = link.querySelector('div:last-child').textContent;
 
-            const eventDate = new Date(dateText);
-            const daysRemaining = getDaysRemaining(eventDate);
+    const eventDate = new Date(dateText);
+    const daysRemaining = getDaysRemaining(eventDate);
 
-            const isHybrid = title.includes('HYBRID:');
-            const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
+    const isHybrid = title.includes('HYBRID:');
+    const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
 
-            // URL-Verarbeitung
-            let urlPart = link.href.split('/r2/')[1];
-            urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
+    // URL-Verarbeitung
+    let urlPart = link.href.split('/r2/')[1];
+    urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
 
-            // Highlight wenn bestimmte Domains enthalten sind
-            if (highlightKeywords.some(keyword => eventTitle.includes(keyword))) {
+    // Highlight wenn bestimmte Keywords im Titel enthalten sind
+    if (highlightKeywords.some(keyword => cleanTitle.includes(keyword))) {
+        newEvent.classList.add('highlight');
+    }
 
-                newEvent.classList.add('highlight');
-            }
+    // Event HTML-Template
+    newEvent.innerHTML = `
+        <a href="https://${urlPart}">
+            <div class="event-date">${dateText} - ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
+            <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
+            <div class="event-location">${location}</div>
+        </a>
+    `;
+    
+    eventsContainer.appendChild(newEvent);
+});
 
-            // Event HTML-Template
-            newEvent.innerHTML = `
-                <a href="https://${urlPart}">
-                    <div class="event-date">${dateText} - ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
-                    <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
-                    <div class="event-location">${location}</div>
-                </a>
-            `;
-            
-            eventsContainer.appendChild(newEvent);
-        });
     } catch (error) {
         console.error('Fehler beim Laden der Events:', error);
         document.getElementById('loading').textContent = 'Error loading events. Please try again later.';
