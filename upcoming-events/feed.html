@@ -290,7 +290,8 @@ async function fetchEvents() {
             urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
 
             // Highlight wenn bestimmte Domains enthalten sind
-            if (highlightKeywords.some(keyword => urlPart.includes(keyword))) {
+            if (highlightKeywords.some(keyword => eventTitle.includes(keyword))) {
+
                 newEvent.classList.add('highlight');
             }
 
