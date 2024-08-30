@@ -255,9 +255,9 @@
     <ul id="events-list"></ul>
 <p style="text-align: center; color: #000000;">
   <a href="/contact" style="text-decoration: none; color: #000000;">Contact</a> | <a href="https://www.lumicoo.net/tnlt/datenschutz" style="text-decoration: none; color: #000000;" #000;">Datenschutz</a> | 
- <a href="/index" style="text-decoration: none; color: #000000;">Lumicoo</a> 
+ <a href="/index" style="text-decoration: none; color: #000000;"">Lumicoo</a> 
 </p>
-    <script>
+<script>
 // Keywords, die gehighlighted werden sollen, zentral definiert
 const highlightKeywords = [ "Apple", "Microsoft", "Meta" , "Nvidia", "Intel", "OpenAI", "Google", "Amazon", "Copilot", "Tesla", "Adobe", "Ibm", "Tencent", "Netflix", "Qalcomm", "Samsung"];
 
@@ -273,45 +273,66 @@ async function fetchEvents() {
         
         document.getElementById('loading').style.display = 'none';
         
-events.forEach(event => {
-    const newEvent = document.createElement('li');
-    
-    const link = event.querySelector('a');
-    const dateText = link.querySelector('div:first-child').textContent;
-    const title = link.querySelector('div:nth-child(2)').textContent;
-    const location = link.querySelector('div:last-child').textContent;
+        events.forEach(event => {
+            const newEvent = document.createElement('li');
+            
+            const link = event.querySelector('a');
+            const dateText = link.querySelector('div:first-child').textContent;
+            const title = link.querySelector('div:nth-child(2)').textContent;
+            const location = link.querySelector('div:last-child').textContent;
 
-    const eventDate = new Date(dateText);
-    const daysRemaining = getDaysRemaining(eventDate);
+            // Datum parsen
+            const eventDate = parseEventDate(dateText);
+            const daysRemaining = getDaysRemaining(eventDate);
 
-    const isHybrid = title.includes('HYBRID:');
-    const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
+            const isHybrid = title.includes('HYBRID:');
+            const cleanTitle = isHybrid ? title.replace('HYBRID:', '').trim() : title;
 
-    // URL-Verarbeitung
-    let urlPart = link.href.split('/r2/')[1];
-    urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
+            // URL-Verarbeitung
+            let urlPart = link.href.split('/r2/')[1];
+            urlPart = urlPart.replace(/_/g, '/').replace(/-.*$/, '').replace('.htm', '') + '/';
 
-    // Highlight wenn bestimmte Keywords im Titel enthalten sind
-    if (highlightKeywords.some(keyword => cleanTitle.includes(keyword))) {
-        newEvent.classList.add('highlight');
-    }
+            // Highlight wenn bestimmte Keywords im Titel enthalten sind
+            if (highlightKeywords.some(keyword => cleanTitle.includes(keyword))) {
+                newEvent.classList.add('highlight');
+            }
 
-    // Event HTML-Template
-    newEvent.innerHTML = `
-        <a href="https://${urlPart}">
-            <div class="event-date">${dateText} - ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
-            <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
-            <div class="event-location">${location}</div>
-        </a>
-    `;
-    
-    eventsContainer.appendChild(newEvent);
-});
+            // Event HTML-Template
+            newEvent.innerHTML = `
+                <a href="https://${urlPart}">
+                    <div class="event-date">${dateText} / In   ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''} </div>
+                    <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
+                    <div class="event-location">${location}</div>
+                </a>
+            `;
+            
+            eventsContainer.appendChild(newEvent);
+        });
 
     } catch (error) {
         console.error('Fehler beim Laden der Events:', error);
         document.getElementById('loading').textContent = 'Error loading events. Please try again later.';
     }
+}
+
+function parseEventDate(dateText) {
+    const now = new Date();
+    const [monthStr, dayRange] = dateText.split(' ');
+    const month = new Date(Date.parse(monthStr + " 1, 2021")).getMonth(); // Monat als Zahl (0-11)
+    
+    // Extrahiere die Tage
+    const days = dayRange.split('-').map(day => parseInt(day, 10));
+    const eventDay = days[0]; // Nimm den ersten Tag für den Countdown
+
+    // Erstelle das Datum für das aktuelle Jahr
+    const eventDate = new Date(now.getFullYear(), month, eventDay);
+
+    // Wenn das Eventdatum bereits vergangen ist, setze es auf das nächste Jahr
+    if (eventDate < now) {
+        eventDate.setFullYear(now.getFullYear() + 1);
+    }
+
+    return eventDate;
 }
 
 function getDaysRemaining(eventDate) {
@@ -392,7 +413,7 @@ document.getElementById('emailForm').addEventListener('submit', function(event) 
         submitButton.disabled = false; // Button wieder aktivieren
     });
 });
+</script>
 
-    </script>
 </body>
 </html>
