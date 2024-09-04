@@ -300,7 +300,7 @@ async function fetchEvents() {
             // Event HTML-Template
             newEvent.innerHTML = `
                 <a href="https://${urlPart}">
-                    <div class="event-date">${dateText} / In   ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''} </div>
+                    <div class="event-date">${dateText} / In ${daysRemaining} Day${daysRemaining !== 1 ? 's' : ''}</div>
                     <div class="event-title">${isHybrid ? '<span class="event-type hybrid" style="display:none;">HYBRID</span>' : ''} ${cleanTitle}</div>
                     <div class="event-location">${location}</div>
                 </a>
@@ -325,23 +325,19 @@ function parseEventDate(dateText) {
     const eventDay = days[0]; // Nimm den ersten Tag für den Countdown
 
     // Erstelle das Datum für das aktuelle Jahr
-    const eventDate = new Date(now.getFullYear(), month, eventDay);
-
-    // Wenn das Eventdatum bereits vergangen ist, setze es auf das nächste Jahr
-    if (eventDate < now) {
-        eventDate.setFullYear(now.getFullYear() + 1);
-    }
+    let eventDate = new Date(now.getFullYear(), month, eventDay);
 
     return eventDate;
 }
 
 function getDaysRemaining(eventDate) {
     const now = new Date();
-    const totalDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
+    const totalDays = Math.ceil((eventDate - now) / (1000 * 60 * 60 * 24));
     return totalDays >= 0 ? totalDays : 0;
 }
 
 fetchEvents();
+
 
 // Popup-Funktionalität
 const newsletterButton = document.getElementById('newsletterButton');
