@@ -179,14 +179,14 @@
       }
     }
     
-    button {
-       transition: background-color 0.3s ease;
-    }
+button#searchButton {
+  transition: background-color 0.3s ease;
+}
 
-    button.searching {
-      background-color: #757575; 
-      color: white
-    }
+button#searchButton.searching {
+  background-color: #757575; 
+  color: white;
+}
 
     mark {
       background-color: #2081D6;
@@ -358,7 +358,9 @@
           <p>We will check the API before publication.</p>
           <textarea name="link" rows="1" placeholder="example.com"></textarea>
           <input type="hidden" name="source" value="API-Search - Submission">
-          <input type="submit" value="Submit" id="submit">
+<button id="searchButton" onclick="handleSearch()">
+  <img src="data:image/png;base64,..." alt="Image placeholder" width="24" height="24">
+</button>
         </form>
       </div>
     </div>
@@ -444,26 +446,25 @@ report
         }
     });
 
-    function handleSearch() {
-        const query = document.getElementById('searchInput').value.trim();
-        const auth = document.getElementById('authFilter').value;
-        const https = document.getElementById('httpsFilter').value;
-        const cors = document.getElementById('corsFilter').value;
-        const searchButton = document.querySelector('button');
-        searchButton.classList.add('searching'); // Klasse hinzufügen, um den Ladezustand anzuzeigen
-        
-        if (query) {
-            // Update the URL parameter with the search query
-            const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
-            window.history.replaceState(null, null, newUrl);
+function handleSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+    const auth = document.getElementById('authFilter').value;
+    const https = document.getElementById('httpsFilter').value;
+    const cors = document.getElementById('corsFilter').value;
+    const searchButton = document.getElementById('searchButton');
+    searchButton.classList.add('searching');
+    
+    if (query) {
+        const newUrl = `${window.location.pathname}?q=${encodeURIComponent(query)}`;
+        window.history.replaceState(null, null, newUrl);
 
-            document.getElementById('filters').classList.remove('hidden');
-            searchAPIs(query, auth, https, cors).finally(() => searchButton.classList.remove('searching')); // Ladezustand nach Abschluss der Suche entfernen
-        } else {
-            document.getElementById('filters').classList.add('hidden');
-            searchButton.classList.remove('searching'); // Bei Leerfeld auch den Ladezustand entfernen
-        }
+        document.getElementById('filters').classList.remove('hidden');
+        searchAPIs(query, auth, https, cors).finally(() => searchButton.classList.remove('searching'));
+    } else {
+        document.getElementById('filters').classList.add('hidden');
+        searchButton.classList.remove('searching');
     }
+}
 
     function searchAPIs(query, auth, https, cors) {
         const url = `https://script.google.com/macros/s/AKfycbxwHnl5neCYasIdVZsM3UGqjZZ8-iEYvC0ogEEhyQ_mofSDSsiGxpWngYR83oMq5lkh/exec?query=${encodeURIComponent(query)}&auth=${auth}&https=${https}&cors=${cors}`;
