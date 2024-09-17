@@ -109,6 +109,15 @@
             padding: 9px 19px;
         }
     </style>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+                window.location.href = `https://eu.startpage.com/do/dsearch?q=${encodeURIComponent(query)}`;
+            }
+        };
+    </script>
 </head>
 <body>
     <center>
