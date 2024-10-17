@@ -18,9 +18,8 @@
               gtag('config', 'G-KSGT1M5QP7');
            </script>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
         body {
-            font-family: Inter, sans-serif;
+            font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
             background-color: #212121; 
             margin: 0;
             padding: 20px;
